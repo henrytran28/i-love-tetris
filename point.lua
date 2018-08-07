@@ -7,14 +7,20 @@ function Point:new(x, y)
     return point
 end
 
-function Point:add(point)
-    self.x = self.x + point.x
-    self.y = self.y + point.y
+function sum(p1, p2)
+    return Point:new(p1.x + p2.x, p1.y + p2.y)
 end
 
-function Point:subtract(point)
-    self.x = self.x - point.x
-    self.y = self.y - point.y
+function diff(p1, p2)
+    return Point:new(p1.x - p2.x, p1.y - p2.y)
 end
+
+-- function Point:add(point)
+--     return Point:new(self.x + point.x, self.y + point.y)
+-- end
+
+-- function Point:subtract(point)
+--     return Point:new(self.x - point.x, self.y - point.y)
+-- end
 
 return Point

@@ -1,9 +1,9 @@
 local Square = {}
 
-function Square:new(x, y, color)
+function Square:new(point, color)
     local square = {
-        x = x, 
-        y = y, 
+        x = point.x,
+        y = point.y,
         color = color
     }
     self.__index = Square
@@ -12,8 +12,8 @@ function Square:new(x, y, color)
 end
 
 function Square:offset(x, y)
-    self.x = self.x + (x * unit)
-    self.y = self.y + (y * unit)
+    self.x = self.x + x
+    self.y = self.y + y
 end
 
 function Square:render()

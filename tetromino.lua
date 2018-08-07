@@ -1,5 +1,7 @@
 local Square = require("square")
+local Point = require("point")
 local colors = require("colors")
+local properties = require("properties")
 
 local Tetromino = {}
 
@@ -7,17 +9,42 @@ function Tetromino:new(id, origin, color)
     local tetromino = {
         id = id,
         origin = origin,
-        color = color
+        color = color,
+        squares = {}
     }
-    tetromino.squares = {
-        Square:new(0, 0, color),
-        Square:new(1, 0, color),
-        Square:new(2, 0, color),
-        Square:new(3, 0, color)
-    }
+    for _, value in pairs(properties.LAYOUTS[id]) do
+        table.insert(tetromino.squares, Square:new(sum(origin, value), color))
+    end
     self.__index = Tetromino
     setmetatable(tetromino, Tetromino)
     return tetromino
+end
+
+function Tetromino:offset(x, y)
+    self.origin = sum(self.origin, Point:new(x, y))
+    for _, square in pairs(self.squares) do
+        square:offset(x, y)
+    end
+end
+
+function Tetromino:rotateCw()
+    absRotationPoint = sum(self.origin, properties.ROTATION_POINTS[self.id])
+    for i, square in pairs(self.squares) do
+        currentSquare = diff(Point:new(square.x, square.y), absRotationPoint)
+        btmRight = sum(currentSquare, Point:new(1, 0))
+        newPoint = sum(Point:new(btmRight.y, -btmRight.x), absRotationPoint)
+        self.squares[i] = Square:new(newPoint, self.color)
+    end
+end
+
+function Tetromino:rotateCcw()
+    absRotationPoint = sum(self.origin, properties.ROTATION_POINTS[self.id])
+    for i, square in pairs(self.squares) do
+        currentSquare = diff(Point:new(square.x, square.y), absRotationPoint)
+        topLeft = sum(currentSquare, Point:new(0, 1))
+        newPoint = sum(Point:new(-topLeft.y, topLeft.x), absRotationPoint)
+        self.squares[i] = Square:new(newPoint, self.color)
+    end
 end
 
 function Tetromino:render()

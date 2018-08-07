@@ -1,9 +1,17 @@
 local colors = require("colors")
+local Tetromino = require("tetromino")
+local properties = require("properties")
+local Movement = require("movement")
 
 local Board = {width = 10, height = 22}
 
+local id = "I"
+Board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
+Board.movement = Movement:init(Board)
+
 function Board:render()
     self:renderBackground()
+    self.currentTetromino:render()
 end
 
 function Board:renderBackground()
