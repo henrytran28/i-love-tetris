@@ -5,18 +5,32 @@ local Movement = require("movement")
 local Randomizer = require("randomizer")
 local Matrix = require("matrix")
 
-local Board = {width = 10, height = 22}
+local Board = {
+    width = 10, 
+    height = 22
+}
 
-Randomizer:newList()
-Board.currentTetromino = Randomizer:next()
-Board.nextTetromino = Randomizer:next()
-Board.movement = Movement:init(Board)
-Board.boardTetrominoSquares = {}
-Board.boardTetrominosMatrix = Matrix:new(Board.width, Board.height)
+function Board:getGhostTetromino()
+    self:updateMatrices()
+    ghost = Tetromino:new(self.currentTetromino.id, self.currentTetromino.origin, colors.ASH)
+    for i = 0, self.currentTetromino.state - 1 do
+        ghost:rotateCw()
+    end
+    for i = 0, self.height do
+        ghost:offset(0, -1)
+        for _, square in pairs(ghost.squares) do
+            if square.y < 0 or self.boardTetrominosMatrix[square.x][square.y] == 1 then
+                ghost:offset(0, 1)
+                break
+            end
+        end
+    end
+    return ghost
+end
 
 function Board:switchCurrentTetromino()
     self.currentTetromino = self.nextTetromino
-    -- self.ghostTetromino = self.getGhostTetromino()
+    self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
 end
 
@@ -47,6 +61,9 @@ function Board:render()
     -- Render the background
     self:renderBackground()
 
+    -- Render the ghost tetromino
+    self.ghostTetromino:render()
+
     -- Render pieces except current one
     for _, square in pairs(self.boardTetrominoSquares) do
         square:render()
@@ -56,5 +73,12 @@ function Board:render()
     self.currentTetromino:render()
 end
 
+Randomizer:newList()
+Board.currentTetromino = Randomizer:next()
+Board.nextTetromino = Randomizer:next()
+Board.movement = Movement:init(Board)
+Board.boardTetrominoSquares = {}
+Board.boardTetrominosMatrix = Matrix:new(Board.width, Board.height)
+Board.ghostTetromino = Board:getGhostTetromino()
 
 return Board

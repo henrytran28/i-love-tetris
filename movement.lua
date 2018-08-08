@@ -20,6 +20,7 @@ function Movement:moveLeft()
     end
     if moveable then
         self.board.currentTetromino:offset(-1, 0)
+        self.board.ghostTetromino = self.board:getGhostTetromino()
     end
 end
 
@@ -33,6 +34,7 @@ function Movement:moveRight()
     end
     if moveable then
         self.board.currentTetromino:offset(1, 0)
+        self.board.ghostTetromino = self.board:getGhostTetromino()
     end
 end
 
@@ -46,6 +48,7 @@ function Movement:moveDown()
     end
     if moveable then
         self.board.currentTetromino:offset(0, -1)
+        self.board.ghostTetromino = self.board:getGhostTetromino()
     end
 end
 
@@ -59,6 +62,7 @@ function Movement:moveUp()
     end
     if moveable then
         self.board.currentTetromino:offset(0, 1)
+        self.board.ghostTetromino = self.board:getGhostTetromino()
     end
 end
 
@@ -87,6 +91,7 @@ function Movement:rotateCw()
     self.board.currentTetromino:rotateCw()
     for _, coordinates in pairs(properties.WALL_KICKS_CW[self.board.currentTetromino.id][self.board.currentTetromino.state + 1]) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
+            self.board.ghostTetromino = self.board:getGhostTetromino()
             return
         end
     end
@@ -100,6 +105,7 @@ function Movement:rotateCcw()
     self.board.currentTetromino:rotateCcw()
     for _, coordinates in pairs(properties.WALL_KICKS_CCW[self.board.currentTetromino.id][self.board.currentTetromino.state + 1]) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
+            self.board.ghostTetromino = self.board:getGhostTetromino()
             return
         end
     end

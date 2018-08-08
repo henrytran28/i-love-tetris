@@ -5,6 +5,10 @@ width = 10 * unit
 height = 22 * unit
 love.window.setMode(width, height, nil)
 
+function love.init()
+    Board:init()
+end
+
 function love.draw()
     Board:render()
 end
