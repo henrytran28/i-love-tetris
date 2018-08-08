@@ -6,7 +6,7 @@ local Randomizer = require("randomizer")
 local Matrix = require("matrix")
 
 local Board = {
-    width = 10, 
+    width = 10,
     height = 22
 }
 

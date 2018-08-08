@@ -115,7 +115,7 @@ end
 function Movement:wallKickTestPass(xOffset, yOffset)
     self.board.currentTetromino:offset(xOffset, yOffset)
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.x < 0 or square.x >= self.board.width or 
+        if square.x < 0 or square.x >= self.board.width or
            square.y < 0 or square.y >= self.board.height or
            self.board.boardTetrominosMatrix[square.x][square.y] == 1 then
             self.board.currentTetromino:offset(-xOffset, -yOffset)

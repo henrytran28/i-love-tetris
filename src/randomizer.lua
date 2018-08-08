@@ -16,7 +16,7 @@ function Randomizer:newList()
     for i = #list, 1, -1 do
         local j = math.random(i)
         list[i], list[j] = list[j], list[i]
-        table.insert(shuffled, list[i]) 
+        table.insert(shuffled, list[i])
     end
     self.list = shuffled
 end
@@ -27,8 +27,8 @@ function Randomizer:next()
     end
     nextTetrominoId = table.remove(self.list, 1)
     return Tetromino:new(
-        nextTetrominoId, 
-        properties.SPAWN[nextTetrominoId], 
+        nextTetrominoId,
+        properties.SPAWN[nextTetrominoId],
         properties.COLORS[nextTetrominoId]
     )
 end
