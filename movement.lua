@@ -13,7 +13,7 @@ end
 function Movement:moveLeft()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.x <= 0 then -- or self.board.boardTetrominosMatrix[square.x - 1][square.y] != 0 do
+        if square.x <= 0 or self.board.boardTetrominosMatrix[square.x - 1][square.y] ~= 0 then
             moveable = false
             break
         end
@@ -26,7 +26,7 @@ end
 function Movement:moveRight()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.x + 1 >= self.board.width then -- or self.board.boardTetrominosMatrix[square.x - 1][square.y] != 0 do
+        if square.x + 1 >= self.board.width or self.board.boardTetrominosMatrix[square.x + 1][square.y] ~= 0 then
             moveable = false
             break
         end
@@ -39,7 +39,7 @@ end
 function Movement:moveDown()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y <= 0 then -- or self.board.boardTetrominosMatrix[square.x - 1][square.y] != 0 do
+        if square.y <= 0 or self.board.boardTetrominosMatrix[square.x][square.y - 1] ~= 0 then
             moveable = false
             break
         end
@@ -52,7 +52,7 @@ end
 function Movement:moveUp()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y < self.board.height then -- or self.board.boardTetrominosMatrix[square.x - 1][square.y] != 0 do
+        if square.y < self.board.height or self.board.boardTetrominosMatrix[square.x][square.y + 1] ~= 0 then
             moveable = false
             break
         end
@@ -66,7 +66,7 @@ function Movement:hardDrop()
     for i = 0, self.board.height, 1 do
         self.board.currentTetromino:offset(0, -1)
         for _, square in pairs(self.board.currentTetromino.squares) do
-            if square.y < 0 then -- or self.board.boardTetrominosMatrix[square.x][square.y] == 1 then
+            if square.y < 0 or self.board.boardTetrominosMatrix[square.x][square.y] == 1 then
                 self.board.currentTetromino:offset(0, 1)
                 break
             end
@@ -110,7 +110,8 @@ function Movement:wallKickTestPass(xOffset, yOffset)
     self.board.currentTetromino:offset(xOffset, yOffset)
     for _, square in pairs(self.board.currentTetromino.squares) do
         if square.x < 0 or square.x >= self.board.width or 
-           square.y < 0 or square.y >= self.board.height then
+           square.y < 0 or square.y >= self.board.height or
+           self.board.boardTetrominosMatrix[square.x][square.y] == 1 then
             self.board.currentTetromino:offset(-xOffset, -yOffset)
             return false
         end

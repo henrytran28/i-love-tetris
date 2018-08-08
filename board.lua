@@ -3,6 +3,7 @@ local Tetromino = require("tetromino")
 local properties = require("properties")
 local Movement = require("movement")
 local Randomizer = require("randomizer")
+local Matrix = require("matrix")
 
 local Board = {width = 10, height = 22}
 
@@ -11,6 +12,7 @@ Board.currentTetromino = Randomizer:next()
 Board.nextTetromino = Randomizer:next()
 Board.movement = Movement:init(Board)
 Board.boardTetrominoSquares = {}
+Board.boardTetrominosMatrix = Matrix:new(Board.width, Board.height)
 
 function Board:switchCurrentTetromino()
     self.currentTetromino = self.nextTetromino
@@ -18,17 +20,11 @@ function Board:switchCurrentTetromino()
     self.nextTetromino = Randomizer:next()
 end
 
-function Board:render()
-    -- Render the background
-    self:renderBackground()
-
-    -- Render pieces except current one
+function Board:updateMatrices()
+    self.boardTetrominosMatrix:clear()
     for _, square in pairs(self.boardTetrominoSquares) do
-        square:render()
+        self.boardTetrominosMatrix:fill(square.x, square.y)
     end
-
-    -- Render current playable tetromino
-    self.currentTetromino:render()
 end
 
 function Board:renderBackground()
@@ -44,5 +40,21 @@ function Board:renderBackground()
         end
     end
 end
+
+function Board:render()
+    self:updateMatrices()
+
+    -- Render the background
+    self:renderBackground()
+
+    -- Render pieces except current one
+    for _, square in pairs(self.boardTetrominoSquares) do
+        square:render()
+    end
+
+    -- Render current playable tetromino
+    self.currentTetromino:render()
+end
+
 
 return Board

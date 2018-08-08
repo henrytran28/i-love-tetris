@@ -23,7 +23,7 @@ end
 
 function Randomizer:next()
     if #self.list == 0 then
-        self.list = self:newList()
+        self:newList()
     end
     nextTetrominoId = table.remove(self.list, 1)
     return Tetromino:new(

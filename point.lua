@@ -2,7 +2,7 @@ local Point = {}
 
 function Point:new(x, y)
     local point = {x = x, y = y}
-    self.__index = self
+    self.__index = Point
     setmetatable(point, Point)
     return point
 end
