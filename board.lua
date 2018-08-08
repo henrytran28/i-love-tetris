@@ -2,15 +2,32 @@ local colors = require("colors")
 local Tetromino = require("tetromino")
 local properties = require("properties")
 local Movement = require("movement")
+local Randomizer = require("randomizer")
 
 local Board = {width = 10, height = 22}
 
-local id = "I"
-Board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
+Randomizer:newList()
+Board.currentTetromino = Randomizer:next()
+Board.nextTetromino = Randomizer:next()
 Board.movement = Movement:init(Board)
+Board.boardTetrominoSquares = {}
+
+function Board:switchCurrentTetromino()
+    self.currentTetromino = self.nextTetromino
+    -- self.ghostTetromino = self.getGhostTetromino()
+    self.nextTetromino = Randomizer:next()
+end
 
 function Board:render()
+    -- Render the background
     self:renderBackground()
+
+    -- Render pieces except current one
+    for _, square in pairs(self.boardTetrominoSquares) do
+        square:render()
+    end
+
+    -- Render current playable tetromino
     self.currentTetromino:render()
 end
 

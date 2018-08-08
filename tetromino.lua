@@ -10,7 +10,8 @@ function Tetromino:new(id, origin, color)
         id = id,
         origin = origin,
         color = color,
-        squares = {}
+        squares = {},
+        state = 0
     }
     for _, value in pairs(properties.LAYOUTS[id]) do
         table.insert(tetromino.squares, Square:new(sum(origin, value), color))
@@ -35,6 +36,7 @@ function Tetromino:rotateCw()
         newPoint = sum(Point:new(btmRight.y, -btmRight.x), absRotationPoint)
         self.squares[i] = Square:new(newPoint, self.color)
     end
+    self.state = (self.state + 1) % 4
 end
 
 function Tetromino:rotateCcw()
@@ -45,6 +47,7 @@ function Tetromino:rotateCcw()
         newPoint = sum(Point:new(-topLeft.y, topLeft.x), absRotationPoint)
         self.squares[i] = Square:new(newPoint, self.color)
     end
+    self.state = (self.state - 1) % 4
 end
 
 function Tetromino:render()

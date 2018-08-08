@@ -1,5 +1,6 @@
 local Point = require("point")
 local colors = require("colors")
+local wallKickTable = require("wall_kick_table")
 
 local properties = {
     LAYOUTS = {
@@ -28,6 +29,22 @@ local properties = {
         S = Point:new(1.5, 0.5),
         Z = Point:new(1.5, 0.5),
         T = Point:new(1.5, 0.5)
+    },
+    WALL_KICKS_CW = {
+        J = wallKickTable.CW.JLSTZ,
+        L = wallKickTable.CW.JLSTZ,
+        S = wallKickTable.CW.JLSTZ,
+        T = wallKickTable.CW.JLSTZ,
+        Z = wallKickTable.CW.JLSTZ,
+        I = wallKickTable.CW.I,
+    },
+    WALL_KICKS_CCW = {
+        J = wallKickTable.CCW.JLSTZ,
+        L = wallKickTable.CCW.JLSTZ,
+        S = wallKickTable.CCW.JLSTZ,
+        T = wallKickTable.CCW.JLSTZ,
+        Z = wallKickTable.CCW.JLSTZ,
+        I = wallKickTable.CCW.I,
     },
     COLORS = {
         O = colors.YELLOW,

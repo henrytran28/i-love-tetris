@@ -11,10 +11,13 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
     if key == "up" then
-        Board.currentTetromino:rotateCw()
+        Board.movement:rotateCw()
     end
     if key == "z" then
-        Board.currentTetromino:rotateCcw()
+        Board.movement:rotateCcw()
+    end
+    if key == "space" then
+        Board.movement:hardDrop()
     end
 end
 
