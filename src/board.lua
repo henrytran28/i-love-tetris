@@ -32,6 +32,7 @@ function Board:switchCurrentTetromino()
     self.currentTetromino = self.nextTetromino
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
+    self.holdable = true
 end
 
 function Board:updateMatrices()
@@ -39,6 +40,22 @@ function Board:updateMatrices()
     for _, square in pairs(self.boardTetrominoSquares) do
         self.boardTetrominosMatrix:fill(square.x, square.y)
     end
+end
+
+function Board:holdCurrentTetromino()
+    if not self.holdable then
+        return
+    end
+    self.holdable = false
+    if self.heldTetromino == nil then
+        self.heldTetromino = Tetromino:new(self.currentTetromino.id, properties.SPAWN[self.currentTetromino.id], properties.COLORS[self.currentTetromino.id])
+        self:switchCurrentTetromino()
+    else
+        tmp = self.currentTetromino
+        self.currentTetromino = self.heldTetromino
+        self.heldTetromino = Tetromino:new(tmp.id, properties.SPAWN[tmp.id], properties.COLORS[tmp.id])
+    end
+    self.ghostTetromino = self:getGhostTetromino()
 end
 
 function Board:renderBackground()
@@ -80,5 +97,7 @@ Board.movement = Movement:init(Board)
 Board.boardTetrominoSquares = {}
 Board.boardTetrominosMatrix = Matrix:new(Board.width, Board.height)
 Board.ghostTetromino = Board:getGhostTetromino()
+Board.holdable = true
+Board.heldTetromino = nil
 
 return Board

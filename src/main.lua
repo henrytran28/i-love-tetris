@@ -5,10 +5,6 @@ width = 10 * unit
 height = 22 * unit
 love.window.setMode(width, height, nil)
 
-function love.init()
-    Board:init()
-end
-
 function love.draw()
     Board:render()
 end
@@ -22,6 +18,9 @@ function love.keypressed(key, scancode, isrepeat)
     end
     if key == "space" then
         Board.movement:hardDrop()
+    end
+    if key == "lshift" then
+        Board:holdCurrentTetromino()
     end
 end
 
