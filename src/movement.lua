@@ -82,6 +82,7 @@ function Movement:hardDrop()
     end
 
     self.board:switchCurrentTetromino()
+    self.board.holdable = true
 end
 
 function Movement:rotateCw()

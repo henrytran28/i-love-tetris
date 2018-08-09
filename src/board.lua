@@ -32,7 +32,6 @@ function Board:switchCurrentTetromino()
     self.currentTetromino = self.nextTetromino
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
-    self.holdable = true
 end
 
 function Board:updateMatrices()
@@ -43,6 +42,7 @@ function Board:updateMatrices()
 end
 
 function Board:holdCurrentTetromino()
+    print(self.holdable)
     if not self.holdable then
         return
     end
