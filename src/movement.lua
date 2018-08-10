@@ -4,8 +4,8 @@ local Movement = {}
 
 function Movement:init(board)
     local movement = {}
-    self.__index = Movement
-    setmetatable(movement, Movement)
+    self.__index = self
+    setmetatable(movement, self)
     self.board = board
     return movement
 end

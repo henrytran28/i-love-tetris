@@ -6,8 +6,8 @@ function Square:new(point, color)
         y = point.y,
         color = color
     }
-    self.__index = Square
-    setmetatable(square, Square)
+    self.__index = self
+    setmetatable(square, self)
     return square
 end
 

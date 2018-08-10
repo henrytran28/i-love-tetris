@@ -16,8 +16,8 @@ function Tetromino:new(id, origin, color)
     for _, value in pairs(properties.LAYOUTS[id]) do
         table.insert(tetromino.squares, Square:new(sum(origin, value), color))
     end
-    self.__index = Tetromino
-    setmetatable(tetromino, Tetromino)
+    self.__index = self
+    setmetatable(tetromino, self)
     return tetromino
 end
 

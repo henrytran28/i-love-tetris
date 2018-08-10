@@ -8,8 +8,8 @@ function Matrix:new(width, height)
             matrix[i][j] = 0
         end
     end
-    self.__index = Matrix
-    setmetatable(matrix, Matrix)
+    self.__index = self
+    setmetatable(matrix, self)
     return matrix
 end
 
