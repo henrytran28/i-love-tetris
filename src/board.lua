@@ -90,6 +90,37 @@ function Board:render()
     self.currentTetromino:render()
 end
 
+function Board:getBoardTetrominoSquaresIndex(x, y)
+    for i, square in pairs(self.boardTetrominoSquares) do
+        if square.x == x and square.y == y then
+            return i
+        end
+    end
+    return nil
+end
+
+
+function Board:clearLines(indices)
+    local boardTetrominoSquaresCopy = {}
+    for k, v in pairs(self.boardTetrominoSquares) do
+        boardTetrominoSquaresCopy[k] = v
+    end
+    for _, index in pairs(indices) do
+        for _, square in pairs(self.boardTetrominoSquares) do
+            if square.y == index then
+                bla = self:getBoardTetrominoSquaresIndex(square.x, square.y)
+                if bla ~= nil then
+                    table.remove(boardTetrominoSquaresCopy, bla)
+                end
+            end
+        end
+    end
+    self.boardTetrominoSquares = {}
+    for k, v in pairs(boardTetrominoSquaresCopy) do
+       self.boardTetrominoSquares[k] = v
+   end
+end
+
 Randomizer:newList()
 Board.currentTetromino = Randomizer:next()
 Board.nextTetromino = Randomizer:next()

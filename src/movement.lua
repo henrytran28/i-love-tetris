@@ -84,11 +84,9 @@ function Movement:hardDrop()
     self.board:switchCurrentTetromino()
     self.board.holdable = true
 
-    lol = self.board.boardTetrominosMatrix:getFilledIndices()
-    for i = 1, #lol do
-        io.write(lol[i] .. " ")
-    end
-    print()
+
+    local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
+    self.board:clearLines(filledIndices)
 end
 
 function Movement:rotateCw()
