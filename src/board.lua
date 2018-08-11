@@ -42,7 +42,6 @@ function Board:updateMatrices()
 end
 
 function Board:holdCurrentTetromino()
-    print(self.holdable)
     if not self.holdable then
         return
     end
@@ -127,6 +126,18 @@ function Board:clearLines(indices)
         end
     end
     self.boardTetrominoSquares = self:shallowcopy(boardTetrominoSquaresCopy)
+end
+
+function Board:dropLines(indices)
+    for linesDropped, index in pairs(indices) do
+        print(linesDropped, index)
+        for key, square in pairs(self.boardTetrominoSquares) do
+            print(square.x, square.y)
+            if square.y > index - linesDropped then
+                square.y = square.y - 1
+            end
+        end
+    end
 end
 
 Randomizer:newList()

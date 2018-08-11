@@ -87,6 +87,7 @@ function Movement:hardDrop()
 
     local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
     self.board:clearLines(filledIndices)
+    self.board:dropLines(filledIndices)
 end
 
 function Movement:rotateCw()
