@@ -130,9 +130,7 @@ end
 
 function Board:dropLines(indices)
     for linesDropped, index in pairs(indices) do
-        print(linesDropped, index)
         for key, square in pairs(self.boardTetrominoSquares) do
-            print(square.x, square.y)
             if square.y > index - linesDropped then
                 square.y = square.y - 1
             end
