@@ -62,7 +62,7 @@ function Board:renderBackground()
     for i = 0, self.width, 1 do
         for j = 0, self.height, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
-               ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
+                ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
             else
                 love.graphics.setColor(colors.JET)
@@ -90,8 +90,8 @@ function Board:render()
     self.currentTetromino:render()
 end
 
-function Board:getBoardTetrominoSquaresIndex(x, y)
-    for i, square in pairs(self.boardTetrominoSquares) do
+function Board:getTetrominoSquareIndex(squares, x, y)
+    for i, square in pairs(squares) do
         if square.x == x and square.y == y then
             return i
         end
@@ -99,26 +99,34 @@ function Board:getBoardTetrominoSquaresIndex(x, y)
     return nil
 end
 
+function Board:shallowcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in pairs(orig) do
+            copy[orig_key] = orig_value
+        end
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
 
 function Board:clearLines(indices)
-    local boardTetrominoSquaresCopy = {}
-    for k, v in pairs(self.boardTetrominoSquares) do
-        boardTetrominoSquaresCopy[k] = v
-    end
+    boardTetrominoSquaresCopy = self:shallowcopy(self.boardTetrominoSquares)
     for _, index in pairs(indices) do
         for _, square in pairs(self.boardTetrominoSquares) do
             if square.y == index then
-                bla = self:getBoardTetrominoSquaresIndex(square.x, square.y)
-                if bla ~= nil then
-                    table.remove(boardTetrominoSquaresCopy, bla)
+                squareToRemove = self:getTetrominoSquareIndex(boardTetrominoSquaresCopy,
+                                                              square.x, square.y)
+                if squareToRemove ~= nil then
+                    table.remove(boardTetrominoSquaresCopy, squareToRemove)
                 end
             end
         end
     end
-    self.boardTetrominoSquares = {}
-    for k, v in pairs(boardTetrominoSquaresCopy) do
-       self.boardTetrominoSquares[k] = v
-   end
+    self.boardTetrominoSquares = self:shallowcopy(boardTetrominoSquaresCopy)
 end
 
 Randomizer:newList()
