@@ -1,17 +1,45 @@
 local Board = require("board")
 local timers = require("timers")
 local config = require("config")
+local colors = require("colors")
 
 unit = 40
 width = 10 * unit
 height = 22 * unit
 love.window.setMode(width, height, nil)
 
+function love.load()
+    paused = false
+    love.graphics.setFont(love.graphics.newFont(16))
+    middleX = love.graphics.getWidth() / 2
+    middleY = love.graphics.getHeight() / 2
+end
+
+function pauseGame()
+    love.graphics.setColor(colors.WHITE) love.graphics.printf("PAUSED", middleX / 2, middleY, middleX, "center")
+end
+
 function love.draw()
-    Board:render()
+    if paused then
+        pauseGame()
+    else
+        Board:render()
+    end
+end
+
+function love.focus(focus)
+    if not focus then
+        paused = true
+    end
 end
 
 function love.keypressed(key, scancode, isrepeat)
+    if key == "p" then
+        paused = not paused
+    end
+    if paused then
+        return
+    end
     if key == "left" then
         Board.movement:moveLeft()
     end
@@ -33,6 +61,9 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "lshift" or key == "rshift" or key == "c" then
         Board:holdCurrentTetromino()
     end
+    if key == "escape" then
+        love.event.quit()
+    end
 end
 
 function love.keyreleased(key, scancode, isrepeat)
@@ -48,6 +79,9 @@ function love.keyreleased(key, scancode, isrepeat)
 end
 
 function love.update(dt)
+    if paused then
+        return
+    end
     if love.keyboard.isDown("left") then
         timers.left = timers.left + dt
         if timers.left >= calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
