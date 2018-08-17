@@ -1,3 +1,4 @@
+# Based on the example travis in hererocks
 language: python
 sudo: false
 
@@ -6,7 +7,12 @@ env:
 
 before_install:
   - pip install hererocks
-  - hererocks lua_install -r^ --$LUA
-  - export PATH=$PATH:$PWD/lua_install/bin
+  - hererocks env --$LUA -rlatest  # Use latest LuaRocks, install into 'env' dir
+  - source env/bin/activate
+  - luarocks install busted
 
-# Add tests and coverage here?
+install:
+  - luarocks make
+
+script:
+  - busted
