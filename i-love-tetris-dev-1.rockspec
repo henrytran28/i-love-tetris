@@ -9,7 +9,5 @@ description = {
 }
 build = {
    type = "builtin",
-   modules = {
-      main = "main.lua"
-   }
+   modules = {}
 }
