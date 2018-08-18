@@ -16,4 +16,4 @@ install:
 
 script:
   # - busted
-  echo "Hello"
+  echo "Tests should be here but we can add later if we want"
