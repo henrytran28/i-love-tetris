@@ -4,6 +4,7 @@ local properties = require("properties")
 local Movement = require("movement")
 local Randomizer = require("randomizer")
 local Matrix = require("matrix")
+local utils = require("utils")
 
 local Board = {
     width = 10,
@@ -98,22 +99,8 @@ function Board:getTetrominoSquareIndex(squares, x, y)
     return nil
 end
 
-function Board:shallowcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in pairs(orig) do
-            copy[orig_key] = orig_value
-        end
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
 function Board:clearLines(indices)
-    boardTetrominoSquaresCopy = self:shallowcopy(self.boardTetrominoSquares)
+    boardTetrominoSquaresCopy = utils.shallowcopy(self.boardTetrominoSquares)
     for _, index in pairs(indices) do
         for _, square in pairs(self.boardTetrominoSquares) do
             if square.y == index then
@@ -125,7 +112,7 @@ function Board:clearLines(indices)
             end
         end
     end
-    self.boardTetrominoSquares = self:shallowcopy(boardTetrominoSquaresCopy)
+    self.boardTetrominoSquares = utils.shallowcopy(boardTetrominoSquaresCopy)
 end
 
 function Board:dropLines(indices)

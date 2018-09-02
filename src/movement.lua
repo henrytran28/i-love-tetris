@@ -84,7 +84,6 @@ function Movement:hardDrop()
     self.board:switchCurrentTetromino()
     self.board.holdable = true
 
-
     local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
     self.board:clearLines(filledIndices)
     self.board:dropLines(filledIndices)
