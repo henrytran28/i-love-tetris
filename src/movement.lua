@@ -91,12 +91,9 @@ function Movement:hardDrop()
 end
 
 function Movement:rotateCw()
-    if self.board.currentTetromino.id == "O" then
-        return
-    end
-    prevState = self.board.currentTetromino.state
+    if self.board.currentTetromino.id == "O" then return end
     self.board.currentTetromino:rotateCw()
-    for _, coordinates in pairs(properties.WALL_KICKS_CW[self.board.currentTetromino.id][prevState + 1]) do
+    for _, coordinates in pairs(properties.WALL_KICKS_CW[self.board.currentTetromino.id][self.board.currentTetromino.rotationState:prev() + 1]) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
             self.board.ghostTetromino = self.board:getGhostTetromino()
             return
@@ -106,12 +103,10 @@ function Movement:rotateCw()
 end
 
 function Movement:rotateCcw()
-    if self.board.currentTetromino.id == "O" then
-        return
-    end
+    if self.board.currentTetromino.id == "O" then return end
     prevState = self.board.currentTetromino.state
     self.board.currentTetromino:rotateCcw()
-    for _, coordinates in pairs(properties.WALL_KICKS_CCW[self.board.currentTetromino.id][prevState + 1]) do
+    for _, coordinates in pairs(properties.WALL_KICKS_CCW[self.board.currentTetromino.id][self.board.currentTetromino.rotationState:next() + 1]) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
             self.board.ghostTetromino = self.board:getGhostTetromino()
             return

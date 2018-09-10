@@ -14,7 +14,7 @@ local Board = {
 function Board:getGhostTetromino()
     self:updateMatrices()
     ghost = Tetromino:new(self.currentTetromino.id, self.currentTetromino.origin, colors.ASH)
-    for i = 0, self.currentTetromino.state - 1 do
+    for i = 1, self.currentTetromino.rotationState.value do
         ghost:rotateCw()
     end
     for i = 0, self.height do
