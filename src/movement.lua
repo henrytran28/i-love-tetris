@@ -4,8 +4,8 @@ local Movement = {}
 
 function Movement:init(board)
     local movement = {}
-    self.__index = Movement
-    setmetatable(movement, Movement)
+    self.__index = self
+    setmetatable(movement, self)
     self.board = board
     return movement
 end
@@ -83,6 +83,11 @@ function Movement:hardDrop()
 
     self.board:switchCurrentTetromino()
     self.board.holdable = true
+
+    local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
+    self.board:clearLines(filledIndices)
+    self.board:dropLines(filledIndices)
+    self.board.ghostTetromino = self.board:getGhostTetromino()
 end
 
 function Movement:rotateCw()

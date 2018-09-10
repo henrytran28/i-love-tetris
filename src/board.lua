@@ -4,6 +4,7 @@ local properties = require("properties")
 local Movement = require("movement")
 local Randomizer = require("randomizer")
 local Matrix = require("matrix")
+local utils = require("utils")
 
 local Board = {
     width = 10,
@@ -42,7 +43,6 @@ function Board:updateMatrices()
 end
 
 function Board:holdCurrentTetromino()
-    print(self.holdable)
     if not self.holdable then
         return
     end
@@ -62,7 +62,7 @@ function Board:renderBackground()
     for i = 0, self.width, 1 do
         for j = 0, self.height, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
-               ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
+                ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
             else
                 love.graphics.setColor(colors.JET)
@@ -88,6 +88,41 @@ function Board:render()
 
     -- Render current playable tetromino
     self.currentTetromino:render()
+end
+
+function Board:getTetrominoSquareIndex(squares, x, y)
+    for i, square in pairs(squares) do
+        if square.x == x and square.y == y then
+            return i
+        end
+    end
+    return nil
+end
+
+function Board:clearLines(indices)
+    boardTetrominoSquaresCopy = utils.shallowcopy(self.boardTetrominoSquares)
+    for _, index in pairs(indices) do
+        for _, square in pairs(self.boardTetrominoSquares) do
+            if square.y == index then
+                squareToRemove = self:getTetrominoSquareIndex(boardTetrominoSquaresCopy,
+                                                              square.x, square.y)
+                if squareToRemove ~= nil then
+                    table.remove(boardTetrominoSquaresCopy, squareToRemove)
+                end
+            end
+        end
+    end
+    self.boardTetrominoSquares = utils.shallowcopy(boardTetrominoSquaresCopy)
+end
+
+function Board:dropLines(indices)
+    for linesDropped, index in pairs(indices) do
+        for key, square in pairs(self.boardTetrominoSquares) do
+            if square.y > index - linesDropped then
+                square.y = square.y - 1
+            end
+        end
+    end
 end
 
 Randomizer:newList()
