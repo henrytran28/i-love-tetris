@@ -3,8 +3,8 @@ local timers = require("timers")
 local config = require("config")
 
 unit = 40
-width = 10 * unit
-height = 22 * unit
+width = Board.width * unit
+height = (Board.height - 2) * unit
 love.window.setMode(width, height, nil)
 
 function love.draw()
