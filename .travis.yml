@@ -6,6 +6,9 @@ env:
   - LUA="lua 5.3"
 
 before_install:
+  - sudo add-apt-repository ppa:bartbes/love-stable
+  - sudo apt-get update
+  - sudo apt-get install love
   - pip install hererocks
   - hererocks env --$LUA -rlatest  # Use latest LuaRocks, install into 'env' dir
   - source env/bin/activate
