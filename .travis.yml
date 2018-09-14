@@ -1,0 +1,22 @@
+# Based on the example travis in hererocks
+language: python
+sudo: false
+
+env:
+  - LUA="lua 5.3"
+
+before_install:
+  - sudo add-apt-repository ppa:bartbes/love-stable -y
+  - sudo apt-get update
+  - sudo apt-get install -y love
+  - pip install hererocks
+  - hererocks env --$LUA -rlatest  # Use latest LuaRocks, install into 'env' dir
+  - source env/bin/activate
+  # - luarocks install busted
+
+install:
+  - luarocks make
+
+script:
+  # - busted
+  echo "Tests should be here but we can add later if we want"
