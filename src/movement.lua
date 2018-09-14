@@ -81,13 +81,15 @@ function Movement:hardDrop()
         table.insert(self.board.boardTetrominoSquares, square)
     end
 
-    self.board:switchCurrentTetromino()
+    self.board:getNextTetromino()
     self.board.holdable = true
 
     local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
     self.board:clearLines(filledIndices)
     self.board:dropLines(filledIndices)
     self.board.ghostTetromino = self.board:getGhostTetromino()
+
+    self.board.boardTetrominosMatrix:print()
 end
 
 function Movement:rotateCw()

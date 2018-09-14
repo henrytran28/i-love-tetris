@@ -29,7 +29,7 @@ function Board:getGhostTetromino()
     return ghost
 end
 
-function Board:switchCurrentTetromino()
+function Board:getNextTetromino()
     self.currentTetromino = self.nextTetromino
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
@@ -46,15 +46,17 @@ function Board:holdCurrentTetromino()
     if not self.holdable then
         return
     end
+
     self.holdable = false
     if self.heldTetromino == nil then
         self.heldTetromino = Tetromino:new(self.currentTetromino.id, properties.SPAWN[self.currentTetromino.id], properties.COLORS[self.currentTetromino.id])
-        self:switchCurrentTetromino()
+        self:getNextTetromino()
     else
         tmp = self.currentTetromino
         self.currentTetromino = self.heldTetromino
         self.heldTetromino = Tetromino:new(tmp.id, properties.SPAWN[tmp.id], properties.COLORS[tmp.id])
     end
+
     self.ghostTetromino = self:getGhostTetromino()
 end
 
