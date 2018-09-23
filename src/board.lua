@@ -30,9 +30,29 @@ function Board:getGhostTetromino()
 end
 
 function Board:getNextTetromino()
+    self:updateMatrices()
     self.currentTetromino = self.nextTetromino
+    self:CheckOverlappingSpawn()
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
+end
+
+function Board:CheckOverlappingSpawn()
+    for _, square in pairs(self.currentTetromino.squares) do
+        if self.boardTetrominosMatrix:isFilled(square.x, square.y) then
+            self.currentTetromino:offset(0, 1)
+            self:CheckGameOver()
+        end
+    end
+end
+
+function Board:CheckGameOver()
+    for _, square in pairs(self.currentTetromino.squares) do
+        if square.y >= self.height then
+            print("END GAME")
+            return
+        end
+    end
 end
 
 function Board:updateMatrices()
