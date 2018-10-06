@@ -13,7 +13,8 @@ local Board = {
 
 function Board:getGhostTetromino()
     self:updateMatrices()
-    ghost = Tetromino:new(self.currentTetromino.id, self.currentTetromino.origin, colors.ASH)
+    ghost = Tetromino:new(self.currentTetromino.id,
+        self.currentTetromino.origin, colors.ASH)
     for i = 1, self.currentTetromino.rotationState.value do
         ghost:rotateCw()
     end
@@ -29,24 +30,24 @@ function Board:getGhostTetromino()
     return ghost
 end
 
-function Board:getNextTetromino()
+function Board:cycleNextTetromino()
     self:updateMatrices()
     self.currentTetromino = self.nextTetromino
-    self:CheckOverlappingSpawn()
+    self:checkOverlappingSpawn()
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
 end
 
-function Board:CheckOverlappingSpawn()
+function Board:checkOverlappingSpawn()
     for _, square in pairs(self.currentTetromino.squares) do
         if self.boardTetrominosMatrix:isFilled(square.x, square.y) then
             self.currentTetromino:offset(0, 1)
-            self:CheckGameOver()
+            self:checkGameOver()
         end
     end
 end
 
-function Board:CheckGameOver()
+function Board:checkGameOver()
     for _, square in pairs(self.currentTetromino.squares) do
         if square.y >= self.height then
             print("END GAME")
@@ -69,12 +70,15 @@ function Board:holdCurrentTetromino()
 
     self.holdable = false
     if self.heldTetromino == nil then
-        self.heldTetromino = Tetromino:new(self.currentTetromino.id, properties.SPAWN[self.currentTetromino.id], properties.COLORS[self.currentTetromino.id])
-        self:getNextTetromino()
+        self.heldTetromino = Tetromino:new(self.currentTetromino.id,
+             properties.SPAWN[self.currentTetromino.id],
+             properties.COLORS[self.currentTetromino.id])
+        self:cycleNextTetromino()
     else
         tmp = self.currentTetromino
         self.currentTetromino = self.heldTetromino
-        self.heldTetromino = Tetromino:new(tmp.id, properties.SPAWN[tmp.id], properties.COLORS[tmp.id])
+        self.heldTetromino = Tetromino:new(tmp.id, properties.SPAWN[tmp.id],
+            properties.COLORS[tmp.id])
     end
 
     self.ghostTetromino = self:getGhostTetromino()
@@ -127,7 +131,7 @@ function Board:clearLines(indices)
         for _, square in pairs(self.boardTetrominoSquares) do
             if square.y == index then
                 squareToRemove = self:getTetrominoSquareIndex(boardTetrominoSquaresCopy,
-                                                              square.x, square.y)
+                square.x, square.y)
                 if squareToRemove ~= nil then
                     table.remove(boardTetrominoSquaresCopy, squareToRemove)
                 end

@@ -81,7 +81,7 @@ function Movement:hardDrop()
         table.insert(self.board.boardTetrominoSquares, square)
     end
 
-    self.board:getNextTetromino()
+    self.board:cycleNextTetromino()
     self.board.holdable = true
 
     local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
