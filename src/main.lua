@@ -10,13 +10,14 @@ love.window.setMode(width, height, nil)
 
 function love.load()
     paused = false
-    love.graphics.setFont(love.graphics.newFont(16))
+    love.graphics.setFont(love.graphics.newFont(48))
     middleX = love.graphics.getWidth() / 2
     middleY = love.graphics.getHeight() / 2
 end
 
 function pauseGame()
-    love.graphics.setColor(colors.WHITE) love.graphics.printf("PAUSED", middleX / 2, middleY, middleX, "center")
+    love.graphics.setColor(colors.WHITE)
+    love.graphics.printf("PAUSED", middleX / 2, middleY, middleX, "center")
 end
 
 function love.draw()
