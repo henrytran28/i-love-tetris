@@ -63,6 +63,7 @@ function love.update(dt)
             Board.movement:moveRight()
         end
     end
+
     if love.keyboard.isDown("down") then
         timers.down = timers.down + dt
         if timers.down >= calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
@@ -70,6 +71,16 @@ function love.update(dt)
             Board.movement:moveDown()
         end
     end
+
+    timers.gravity = timers.gravity + dt
+    if timers.gravity >= calculateTime(1, 0.1, config.gravitySpeed) then
+        gravitate()
+    end
+end
+
+function gravitate()
+    Board.movement:moveDown() 
+    timers.gravity = 0
 end
 
 function calculateTime(timeAtMin, timeAtMax, speedPercent)
