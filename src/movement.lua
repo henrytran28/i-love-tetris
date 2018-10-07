@@ -81,13 +81,12 @@ function Movement:hardDrop()
         table.insert(self.board.boardTetrominoSquares, square)
     end
 
-    self.board:switchCurrentTetromino()
+    self.board:cycleNextTetromino()
     self.board.holdable = true
 
     local filledIndices = self.board.boardTetrominosMatrix:getFilledIndices()
     self.board:clearLines(filledIndices)
     self.board:dropLines(filledIndices)
-    self.board.ghostTetromino = self.board:getGhostTetromino()
 end
 
 function Movement:rotateCw()
@@ -106,7 +105,8 @@ function Movement:rotateCcw()
     if self.board.currentTetromino.id == "O" then return end
     prevState = self.board.currentTetromino.state
     self.board.currentTetromino:rotateCcw()
-    for _, coordinates in pairs(properties.WALL_KICKS_CCW[self.board.currentTetromino.id][self.board.currentTetromino.rotationState:next() + 1]) do
+    for _, coordinates in pairs(properties.WALL_KICKS_CCW[self.board.currentTetromino.id]
+        [self.board.currentTetromino.rotationState:next() + 1]) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
             self.board.ghostTetromino = self.board:getGhostTetromino()
             return
@@ -120,7 +120,7 @@ function Movement:wallKickTestPass(xOffset, yOffset)
     for _, square in pairs(self.board.currentTetromino.squares) do
         if square.x < 0 or square.x >= self.board.width or
            square.y < 0 or square.y >= self.board.height or
-           self.board.boardTetrominosMatrix[square.x][square.y] == 1 then
+           self.board.boardTetrominosMatrix:isFilled(square.x, square.y) then
             self.board.currentTetromino:offset(-xOffset, -yOffset)
             return false
         end
