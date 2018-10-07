@@ -131,7 +131,7 @@ function Board:clearLines(indices)
         for _, square in pairs(self.boardTetrominoSquares) do
             if square.y == index then
                 squareToRemove = self:getTetrominoSquareIndex(boardTetrominoSquaresCopy,
-                square.x, square.y)
+                                                              square.x, square.y)
                 if squareToRemove ~= nil then
                     table.remove(boardTetrominoSquaresCopy, squareToRemove)
                 end
