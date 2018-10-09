@@ -1,6 +1,6 @@
 local Point = require("point")
 
-describe("#Point", function()
+describe("#Point", function() -- tagged as "Point"
     it("Constructor", function()
         for i = 0, 9, 1 do
             point = Point:new(i, j)

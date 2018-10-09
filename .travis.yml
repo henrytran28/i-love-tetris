@@ -1,4 +1,3 @@
-# Based on the example travis in hererocks
 language: python
 sudo: false
 
@@ -12,11 +11,10 @@ before_install:
   - pip install hererocks
   - hererocks env --$LUA -rlatest  # Use latest LuaRocks, install into 'env' dir
   - source env/bin/activate
-  # - luarocks install busted
+  - luarocks install busted
 
 install:
   - luarocks make
 
 script:
-  # - busted
-  echo "Tests should be here but we can add later if we want"
+  - busted --pattern "_test" src
