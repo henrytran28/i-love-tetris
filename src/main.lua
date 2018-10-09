@@ -1,5 +1,6 @@
+require("keyboard")
+
 local Board = require("board")
-local Keyboard = require("keyboard")
 local Board = require("board")
 
 unit = 40
