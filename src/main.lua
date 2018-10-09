@@ -1,6 +1,6 @@
-require("keyboard")
+require("src/keyboard/keyboard")
 
-local Board = require("board")
+local Board = require("src/board/board")
 
 unit = 40
 width = Board.width * unit
