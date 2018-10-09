@@ -1,7 +1,6 @@
 require("keyboard")
 
 local Board = require("board")
-local Board = require("board")
 
 unit = 40
 width = Board.width * unit
