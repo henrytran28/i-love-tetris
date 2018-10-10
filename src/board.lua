@@ -6,10 +6,26 @@ local Randomizer = require("randomizer")
 local Matrix = require("matrix")
 local utils = require("utils")
 
-local Board = {
-    width = 10,
-    height = 22
-}
+local Board = {}
+
+function Board:new(width, height)
+    local board = {
+        width = width,
+        height = height,
+        boardTetrominosMatrix = Matrix:new(width, height),
+        boardTetrominoSquares = {},
+        holdable = true,
+        heldTetromino = nil
+    }
+    self.__index = self
+    setmetatable(board, self)
+    Randomizer:newList()
+    self.currentTetromino = Randomizer:next()
+    self.nextTetromino = Randomizer:next()
+    self.ghostTetromino = board:getGhostTetromino()
+    self.movement = Movement:init(board)
+    return board
+end
 
 function Board:getGhostTetromino()
     self:updateMatrices()
@@ -124,15 +140,5 @@ function Board:dropLines(indices)
         end
     end
 end
-
-Randomizer:newList()
-Board.currentTetromino = Randomizer:next()
-Board.nextTetromino = Randomizer:next()
-Board.movement = Movement:init(Board)
-Board.boardTetrominoSquares = {}
-Board.boardTetrominosMatrix = Matrix:new(Board.width, Board.height)
-Board.ghostTetromino = Board:getGhostTetromino()
-Board.holdable = true
-Board.heldTetromino = nil
 
 return Board

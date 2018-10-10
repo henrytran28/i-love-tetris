@@ -7,31 +7,33 @@ width = 10 * unit
 height = 22 * unit
 love.window.setMode(width, height, nil)
 
+board = Board:new(10, 22)
+
 function love.draw()
-    Board:render()
+    board:render()
 end
 
 function love.keypressed(key, scancode, isrepeat)
     if key == "left" then
-        Board.movement:moveLeft()
+        board.movement:moveLeft()
     end
     if key == "right" then
-        Board.movement:moveRight()
+        board.movement:moveRight()
     end
     if key == "down" then
-        Board.movement:moveDown()
+        board.movement:moveDown()
     end
     if key == "up" then
-        Board.movement:rotateCw()
+        board.movement:rotateCw()
     end
     if key == "z" then
-        Board.movement:rotateCcw()
+        board.movement:rotateCcw()
     end
     if key == "space" then
-        Board.movement:hardDrop()
+        board.movement:hardDrop()
     end
     if key == "lshift" or key == "rshift" or key == "c" then
-        Board:holdCurrentTetromino()
+        board:holdCurrentTetromino()
     end
 end
 
@@ -52,7 +54,7 @@ function love.update(dt)
         timers.left = timers.left + dt
         if timers.left >= calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
             timers.left = timers.left - calculateTime(0.1, 0.01, config.leftRightSpeedPercent)
-            Board.movement:moveLeft()
+            board.movement:moveLeft()
         end
     end
 
@@ -60,14 +62,14 @@ function love.update(dt)
         timers.right = timers.right + dt
         if timers.right >= calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
             timers.right = timers.right - calculateTime(0.1, 0.01, config.leftRightSpeedPercent)
-            Board.movement:moveRight()
+            board.movement:moveRight()
         end
     end
     if love.keyboard.isDown("down") then
         timers.down = timers.down + dt
         if timers.down >= calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
             timers.down = timers.down - calculateTime(0.1, 0.01, config.softDropSpeedPercent)
-            Board.movement:moveDown()
+            board.movement:moveDown()
         end
     end
 end
