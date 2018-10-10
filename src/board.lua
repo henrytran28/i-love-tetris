@@ -149,6 +149,7 @@ function Board:dropLines(indices)
             end
         end
     end
+    self.ghostTetromino = self:getGhostTetromino()
 end
 
 Randomizer:newList()
