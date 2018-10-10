@@ -2,27 +2,34 @@ local Board = require("board")
 local timer = require("timer")
 local config = require("config")
 
+local Keyboard = {}
+local board = {}
+
+function Keyboard.init(b)
+    board = b
+end
+
 function love.keypressed(key, scancode, isrepeat)
     if key == "left" then
-        Board.movement:moveLeft()
+        board.movement:moveLeft()
     end
     if key == "right" then
-        Board.movement:moveRight()
+        board.movement:moveRight()
     end
     if key == "down" then
-        Board.movement:moveDown()
+        board.movement:moveDown()
     end
     if key == "up" then
-        Board.movement:rotateCw()
+        board.movement:rotateCw()
     end
     if key == "z" then
-        Board.movement:rotateCcw()
+        board.movement:rotateCcw()
     end
     if key == "space" then
-        Board.movement:hardDrop()
+        board.movement:hardDrop()
     end
     if key == "lshift" or key == "rshift" or key == "c" then
-        Board:holdCurrentTetromino()
+        board:holdCurrentTetromino()
     end
 end
 
@@ -43,7 +50,7 @@ function love.update(dt)
         timer.left = timer.left + dt
         if timer.left >= timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
             timer.left = timer.left - timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent)
-            Board.movement:moveLeft()
+            board.movement:moveLeft()
         end
     end
 
@@ -51,14 +58,16 @@ function love.update(dt)
         timer.right = timer.right + dt
         if timer.right >= timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
             timer.right = timer.right - timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent)
-            Board.movement:moveRight()
+            board.movement:moveRight()
         end
     end
     if love.keyboard.isDown("down") then
         timer.down = timer.down + dt
         if timer.down >= timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
             timer.down = timer.down - timer.calculateTime(0.1, 0.01, config.softDropSpeedPercent)
-            Board.movement:moveDown()
+            board.movement:moveDown()
         end
     end
 end
+
+return Keyboard

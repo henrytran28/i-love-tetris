@@ -3,10 +3,9 @@ local properties = require("properties")
 local Movement = {}
 
 function Movement:init(board)
-    local movement = {}
+    local movement = { board = board }
     self.__index = self
     setmetatable(movement, self)
-    self.board = board
     return movement
 end
 
