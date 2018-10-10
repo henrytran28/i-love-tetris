@@ -29,7 +29,8 @@ end
 
 function Board:getGhostTetromino()
     self:updateMatrices()
-    ghost = Tetromino:new(self.currentTetromino.id, self.currentTetromino.origin, colors.ASH)
+    ghost = Tetromino:new(self.currentTetromino.id,
+        self.currentTetromino.origin, colors.ASH)
     for i = 1, self.currentTetromino.rotationState.value do
         ghost:rotateCw()
     end
@@ -45,10 +46,30 @@ function Board:getGhostTetromino()
     return ghost
 end
 
-function Board:switchCurrentTetromino()
+function Board:cycleNextTetromino()
+    self:updateMatrices()
     self.currentTetromino = self.nextTetromino
+    self:checkOverlappingSpawn()
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
+end
+
+function Board:checkOverlappingSpawn()
+    for _, square in pairs(self.currentTetromino.squares) do
+        if self.boardTetrominosMatrix:isFilled(square.x, square.y) then
+            self.currentTetromino:offset(0, 1)
+            self:checkGameOver()
+        end
+    end
+end
+
+function Board:checkGameOver()
+    for _, square in pairs(self.currentTetromino.squares) do
+        if square.y >= self.height then
+            print("END GAME")
+            return
+        end
+    end
 end
 
 function Board:updateMatrices()
@@ -62,21 +83,26 @@ function Board:holdCurrentTetromino()
     if not self.holdable then
         return
     end
+
     self.holdable = false
     if self.heldTetromino == nil then
-        self.heldTetromino = Tetromino:new(self.currentTetromino.id, properties.SPAWN[self.currentTetromino.id], properties.COLORS[self.currentTetromino.id])
-        self:switchCurrentTetromino()
+        self.heldTetromino = Tetromino:new(self.currentTetromino.id,
+             properties.SPAWN[self.currentTetromino.id],
+             properties.COLORS[self.currentTetromino.id])
+        self:cycleNextTetromino()
     else
         tmp = self.currentTetromino
         self.currentTetromino = self.heldTetromino
-        self.heldTetromino = Tetromino:new(tmp.id, properties.SPAWN[tmp.id], properties.COLORS[tmp.id])
+        self.heldTetromino = Tetromino:new(tmp.id, properties.SPAWN[tmp.id],
+            properties.COLORS[tmp.id])
     end
+
     self.ghostTetromino = self:getGhostTetromino()
 end
 
 function Board:renderBackground()
     for i = 0, self.width, 1 do
-        for j = 0, self.height, 1 do
+        for j = 0, self.height - 2, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
                 ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
@@ -139,6 +165,7 @@ function Board:dropLines(indices)
             end
         end
     end
+    self.ghostTetromino = self:getGhostTetromino()
 end
 
 return Board

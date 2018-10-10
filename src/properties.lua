@@ -13,13 +13,13 @@ local properties = {
         T = { Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(2, 0) }
     },
     SPAWN = {
-        O = Point:new(4, 20),
-        I = Point:new(3, 20),
-        J = Point:new(3, 20),
-        L = Point:new(3, 20),
-        S = Point:new(3, 20),
-        Z = Point:new(3, 20),
-        T = Point:new(3, 20)
+        O = Point:new(4, 19),
+        I = Point:new(3, 19),
+        J = Point:new(3, 19),
+        L = Point:new(3, 19),
+        S = Point:new(3, 19),
+        Z = Point:new(3, 19),
+        T = Point:new(3, 19)
     },
     ROTATION_POINTS = {
         O = Point:new(1.0, 1.0),

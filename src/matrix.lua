@@ -24,12 +24,16 @@ function Matrix:unfill(x, y)
     self[x][y] = 0
 end
 
+function Matrix:isFilled(x, y)
+    return self[x][y] == 1
+end
+
 function Matrix:getFilledIndices()
     filledIndices = {}
     for j = 0, self.height - 1 do
         filled = true
         for i = 0, self.width - 1 do
-            if self[i][j] == 0 then
+            if not self:isFilled(i, j) then
                 filled = false
             end
         end
@@ -55,6 +59,7 @@ function Matrix:print()
         end
         io.write("\n")
     end
+    print()
 end
 
 return Matrix
