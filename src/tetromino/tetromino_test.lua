@@ -91,13 +91,13 @@ describe("#Tetromino", function() -- tagged as "Tetromino"
                         -- get a list of strings representing the tetromino's square's indices
                         actualLayouts = {} -- {(x1, y1), (x2, y2) ...}
                         for _, square in pairs(tetromino.squares) do
-                            actualLayoutStr = "("..tostring(math.floor(square.x))..", "..tostring(math.floor(square.y))..")" -- (x, y)
+                            actualLayoutStr = tostring(math.floor(square.x)).." "..tostring(math.floor(square.y)) -- "x y"
                             table.insert(actualLayouts, actualLayoutStr)
                         end
                         -- iterate through each layout point defined above
                         for _, offset in pairs(offsets) do
-                            -- calculate the expected resulting points using the offset, also in the form (x, y)
-                            expectedPositionStr = "("..tostring(tetromino.origin.x + offset[1])..", "..tostring(tetromino.origin.y + offset[2])..")"
+                            -- calculate the expected resulting points using the offset, also in the form "x y"
+                            expectedPositionStr = tostring(tetromino.origin.x + offset[1]).." "..tostring(tetromino.origin.y + offset[2])
                             -- assert that the expected resulting points exist in actualLayouts
                             assert.True(tableContains(actualLayouts, expectedPositionStr))
                         end
