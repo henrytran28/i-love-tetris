@@ -105,31 +105,68 @@ describe("#Tetromino", function() -- tagged as "Tetromino"
 
     it("Clockwise Rotation", function()
         for id, expectedOffsets in pairs(expectedOffsetsPerRotation) do
-            for i = 0, 0, 1 do
-                for j = 0, 0, 1 do
+            for i = 0, 9, 1 do
+                for j = 0, 21, 1 do
                     tetromino = Tetromino:new(id, Point:new(i, j), properties.COLORS[id])
                     oldPosition = tetromino.origin
-                    for numRotations, offsets in pairs(expectedOffsets) do
+                    for i = 1, #expectedOffsets, 1 do
+                        numRotations = i - 1
                         -- check if origin remained the same afer a rotation
                         assert.are.same(tetromino.origin, Point:new(oldPosition.x, oldPosition.y))
 
                         -- get a list of strings representing the tetromino's square's indices
-                        actualLayouts = {} -- {(x1, y1), (x2, y2) ...}
+                        actualLayouts = {} -- {"x1 y1", "x2 y2" ...}
                         for _, square in pairs(tetromino.squares) do
                             actualLayoutStr = tostring(math.floor(square.x)).." "..tostring(math.floor(square.y)) -- "x y"
                             table.insert(actualLayouts, actualLayoutStr)
                         end
                         -- iterate through each layout point defined above
-                        for _, offset in pairs(offsets) do
+                        for _, offset in pairs(expectedOffsets[i]) do
                             -- calculate the expected resulting points using the offset, also in the form "x y"
                             expectedPositionStr = tostring(tetromino.origin.x + offset[1]).." "..tostring(tetromino.origin.y + offset[2])
                             -- assert that the expected resulting points exist in actualLayouts
                             assert.True(tableContains(actualLayouts, expectedPositionStr))
                         end
                         -- check value of rotation state
-                        assert.are.equal(tetromino.rotationState.value, (numRotations - 1) % 4)
+                        assert.are.equal(tetromino.rotationState.value, (numRotations) % 4)
                         -- rotate cw for the next loop
                         tetromino:rotateCw()
+                    end
+                end
+            end
+        end
+    end)
+
+    it("Counter Clockwise Rotation", function()
+        for id, expectedOffsets in pairs(expectedOffsetsPerRotation) do
+            for i = 0, 9, 1 do
+                for j = 0, 21, 1 do
+                    tetromino = Tetromino:new(id, Point:new(i, j), properties.COLORS[id])
+                    oldPosition = tetromino.origin
+                    -- for numRotations, offsets in pairs(expectedOffsets) do
+                    numRotations = 0
+                    for i = #expectedOffsets, 1, -1 do
+                        -- check if origin remained the same afer a rotation
+                        assert.are.same(tetromino.origin, Point:new(oldPosition.x, oldPosition.y))
+
+                        -- get a list of strings representing the tetromino's square's indices
+                        actualLayouts = {} -- {"x1 y1", "x2 y2" ...}
+                        for _, square in pairs(tetromino.squares) do
+                            actualLayoutStr = tostring(math.floor(square.x)).." "..tostring(math.floor(square.y)) -- "x y"
+                            table.insert(actualLayouts, actualLayoutStr)
+                        end
+                        -- iterate through each layout point defined above
+                        for _, offset in pairs(expectedOffsets[i]) do
+                            -- calculate the expected resulting points using the offset, also in the form "x y"
+                            expectedPositionStr = tostring(tetromino.origin.x + offset[1]).." "..tostring(tetromino.origin.y + offset[2])
+                            -- assert that the expected resulting points exist in actualLayouts
+                            assert.True(tableContains(actualLayouts, expectedPositionStr))
+                        end
+                        -- check value of rotation state
+                        assert.are.equal(tetromino.rotationState.value, (4 - numRotations) % 4)
+                        -- rotate ccw for the next loop
+                        tetromino:rotateCcw()
+                        numRotations = numRotations + 1
                     end
                 end
             end
