@@ -8,11 +8,10 @@ local utils = require("utils")
 
 local Board = {}
 
-function Board:new(width, height, unit)
+function Board:new(width, height)
     local board = {
         width = width,
         height = height,
-        unit = unit,
         boardTetrominosMatrix = Matrix:new(width, height),
         boardTetrominoSquares = {},
         holdable = true,
@@ -101,7 +100,8 @@ function Board:holdCurrentTetromino()
     self.ghostTetromino = self:getGhostTetromino()
 end
 
-function Board:renderBackground(startX, startY, endX, endY, unit)
+function Board:renderBackground(startX, startY, endX, endY)
+    unit = properties.unit
     for i = startX, endX - 1, 1 do
         for j = startY, endY - 1, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
@@ -119,30 +119,31 @@ function Board:render()
     self:updateMatrices()
 
     -- Render the background
-    self:renderBackground(0, 0, self.width, self.height - 2, self.unit)
+    self:renderBackground(self.xOffset, self.yOffset, self.width + xOffset,
+        self.height + yOffset - 2)
 
     -- Render the ghost tetromino
-    self.ghostTetromino:render(self.unit)
+    self.ghostTetromino:render()
 
     -- Render pieces except current one
     for _, square in pairs(self.boardTetrominoSquares) do
-        square:render(self.unit)
+        square:render()
     end
 
     -- Render current playable tetromino
-    self.currentTetromino:render(self.unit)
+    self.currentTetromino:render()
 
     -- Render current held piece
     self:renderHeldPiece()
 end
 
 function Board:renderHeldPiece()
-    self:renderBackground(11, 1, 16, 5, self.unit)
+    self:renderBackground(1, 1, 6, 5)
     if self.heldTetromino then
         id = self.heldTetromino.id
         local heldPieceToRender = Tetromino:new(id, properties.HOLD[id],
             properties.COLORS[id])
-        heldPieceToRender:render(self.unit)
+        heldPieceToRender:render()
     end
 end
 

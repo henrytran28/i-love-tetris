@@ -3,6 +3,9 @@ local colors = require("colors")
 local wallKickTable = require("wall_kick_table")
 
 local properties = {
+    UNIT = 30,
+    XOFFSET = 8,
+    YOFFSET = 0,
     LAYOUTS = {
         O = { Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(0, 1) },
         I = { Point:new(0, 0), Point:new(1, 0), Point:new(2, 0), Point:new(3, 0) },
@@ -22,13 +25,13 @@ local properties = {
         T = Point:new(3, 19)
     },
     HOLD = {
-        O = Point:new(12.5, 16),
-        I = Point:new(11.5, 16.5),
-        J = Point:new(12, 16),
-        L = Point:new(12, 16),
-        S = Point:new(12, 16),
-        Z = Point:new(12, 16),
-        T = Point:new(12, 16)
+        O = Point:new(-5.5, 16),
+        I = Point:new(-6.5, 16.5),
+        J = Point:new(-6, 16),
+        L = Point:new(-6, 16),
+        S = Point:new(-6, 16),
+        Z = Point:new(-6, 16),
+        T = Point:new(-6, 16)
     },
     ROTATION_POINTS = {
         O = Point:new(1.0, 1.0),

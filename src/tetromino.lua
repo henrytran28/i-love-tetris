@@ -51,9 +51,9 @@ function Tetromino:rotateCcw()
     self.rotationState:decrement()
 end
 
-function Tetromino:render(unit)
+function Tetromino:render(unit, xOffset, yOffset)
     for _, square in pairs(self.squares) do
-        square:render(unit)
+        square:render(unit, xOffset, yOffset)
     end
 end
 
