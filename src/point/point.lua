@@ -8,11 +8,11 @@ function Point:new(x, y)
 end
 
 function sum(p1, p2)
-    return Point:new(p1.x + p2.x, p1.y + p2.y)
+    return Point:new(math.floor(p1.x + p2.x), math.floor(p1.y + p2.y))
 end
 
 function diff(p1, p2)
-    return Point:new(p1.x - p2.x, p1.y - p2.y)
+    return Point:new(math.floor(p1.x - p2.x), math.floor(p1.y - p2.y))
 end
 
 return Point
