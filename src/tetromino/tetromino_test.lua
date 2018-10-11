@@ -54,11 +54,21 @@ describe("#Tetromino", function() -- tagged as "Tetromino"
     end)
 
     expectedOffsetsPerRotation = {
-        ["O"] = {{Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(0, 1)}, -- initial layout
-                 {Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(0, 1)}, -- 1 cw rotation
-                 {Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(0, 1)}, -- 2 cw rotations
-                 {Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(0, 1)}, -- 3 cw rotations
-                 {Point:new(0, 0), Point:new(1, 0), Point:new(1, 1), Point:new(0, 1)}}, -- initial layout
+        ["O"] = {{{0, 0}, {1, 0}, {1, 1}, {0, 1}}, -- initial layout
+                 {{0, 0}, {1, 0}, {1, 1}, {0, 1}}, -- 1 cw rotation
+                 {{0, 0}, {1, 0}, {1, 1}, {0, 1}}, -- 2 cw rotations
+                 {{0, 0}, {1, 0}, {1, 1}, {0, 1}}, -- 3 cw rotations
+                 {{0, 0}, {1, 0}, {1, 1}, {0, 1}}}, -- initial layout
+        ["I"] = {{{0, 0}, {1, 0}, {2, 0}, {3, 0}},
+                 {{2, 0}, {2, 1}, {2,-1}, {2,-2}},
+                 {{0,-1}, {1,-1}, {2,-1}, {3,-1}},
+                 {{1,-2}, {1,-1}, {1, 0}, {1, 1}},
+                 {{0, 0}, {1, 0}, {2, 0}, {3, 0}}},
+        ["J"] = {{{0, 0}, {1, 0}, {2, 0}, {0, 1}},
+                 {{1,-1}, {1, 0}, {1, 1}, {2, 1}},
+                 {{0, 0}, {1, 0}, {2, 0}, {2,-1}},
+                 {{0,-1}, {1,-1}, {1, 0}, {1, 1}},
+                 {{0, 0}, {1, 0}, {2, 0}, {0, 1}}},
     }
 
     function tableContains(table, value)
@@ -70,8 +80,8 @@ describe("#Tetromino", function() -- tagged as "Tetromino"
 
     it("Clockwise Rotation", function()
         for id, expectedOffsets in pairs(expectedOffsetsPerRotation) do
-            for i = 0, 9, 1 do
-                for j = 0, 21, 1 do
+            for i = 0, 0, 1 do
+                for j = 0, 0, 1 do
                     tetromino = Tetromino:new(id, Point:new(i, j), properties.COLORS[id])
                     oldPosition = tetromino.origin
                     for numRotations, offsets in pairs(expectedOffsets) do
@@ -81,14 +91,13 @@ describe("#Tetromino", function() -- tagged as "Tetromino"
                         -- get a list of strings representing the tetromino's square's indices
                         actualLayouts = {} -- {(x1, y1), (x2, y2) ...}
                         for _, square in pairs(tetromino.squares) do
-                            actualLayoutStr = "("..tostring(square.x)..", "..tostring(square.y)..")" -- (x, y)
+                            actualLayoutStr = "("..tostring(math.floor(square.x))..", "..tostring(math.floor(square.y))..")" -- (x, y)
                             table.insert(actualLayouts, actualLayoutStr)
                         end
-
                         -- iterate through each layout point defined above
                         for _, offset in pairs(offsets) do
                             -- calculate the expected resulting points using the offset, also in the form (x, y)
-                            expectedPositionStr = "("..tostring(tetromino.origin.x + offset.x)..", "..tostring(tetromino.origin.y + offset.y)..")"
+                            expectedPositionStr = "("..tostring(tetromino.origin.x + offset[1])..", "..tostring(tetromino.origin.y + offset[2])..")"
                             -- assert that the expected resulting points exist in actualLayouts
                             assert.True(tableContains(actualLayouts, expectedPositionStr))
                         end
