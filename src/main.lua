@@ -1,15 +1,13 @@
 local keyboard = require("keyboard")
 local Board = require("board")
 
-local board = Board:new(10, 22)
-local nextPieceBoard = Board:new(5, 4)
+local unit = 40
+local board = Board:new(10, 22, unit)
 
-unit = 40
-width = board.width * unit
+width = (board.width + 8) * unit
 height = (board.height - 2) * unit
 keyboard.init(board)
 love.window.setMode(width, height, nil)
-
 
 function love.draw()
     board:render()

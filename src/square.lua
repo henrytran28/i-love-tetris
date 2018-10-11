@@ -16,7 +16,7 @@ function Square:offset(x, y)
     self.y = self.y + y
 end
 
-function Square:render()
+function Square:render(unit)
     love.graphics.setColor(self.color)
     love.graphics.rectangle("fill", self.x * unit, height - ((self.y + 1) * unit), unit, unit)
     love.graphics.setColor({0.8 * self.color[1], 0.8 * self.color[2], 0.8 * self.color[3]})

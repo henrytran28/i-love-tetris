@@ -21,6 +21,15 @@ local properties = {
         Z = Point:new(3, 19),
         T = Point:new(3, 19)
     },
+    HOLD = {
+        O = Point:new(12.5, 16),
+        I = Point:new(11.5, 16.5),
+        J = Point:new(12, 16),
+        L = Point:new(12, 16),
+        S = Point:new(12, 16),
+        Z = Point:new(12, 16),
+        T = Point:new(12, 16)
+    },
     ROTATION_POINTS = {
         O = Point:new(1.0, 1.0),
         I = Point:new(2.0, 0.0),

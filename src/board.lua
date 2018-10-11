@@ -8,10 +8,11 @@ local utils = require("utils")
 
 local Board = {}
 
-function Board:new(width, height)
+function Board:new(width, height, unit)
     local board = {
         width = width,
         height = height,
+        unit = unit,
         boardTetrominosMatrix = Matrix:new(width, height),
         boardTetrominoSquares = {},
         holdable = true,
@@ -20,10 +21,10 @@ function Board:new(width, height)
     self.__index = self
     setmetatable(board, self)
     Randomizer:newList()
-    self.currentTetromino = Randomizer:next()
-    self.nextTetromino = Randomizer:next()
-    self.ghostTetromino = board:getGhostTetromino()
-    self.movement = Movement:init(board)
+    board.currentTetromino = Randomizer:next()
+    board.nextTetromino = Randomizer:next()
+    board.ghostTetromino = board:getGhostTetromino()
+    board.movement = Movement:init(board)
     return board
 end
 
@@ -100,9 +101,9 @@ function Board:holdCurrentTetromino()
     self.ghostTetromino = self:getGhostTetromino()
 end
 
-function Board:renderBackground()
-    for i = 0, self.width, 1 do
-        for j = 0, self.height - 2, 1 do
+function Board:renderBackground(startX, startY, endX, endY, unit)
+    for i = startX, endX - 1, 1 do
+        for j = startY, endY - 1, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
                 ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
@@ -118,18 +119,31 @@ function Board:render()
     self:updateMatrices()
 
     -- Render the background
-    self:renderBackground()
+    self:renderBackground(0, 0, self.width, self.height - 2, self.unit)
 
     -- Render the ghost tetromino
-    self.ghostTetromino:render()
+    self.ghostTetromino:render(self.unit)
 
     -- Render pieces except current one
     for _, square in pairs(self.boardTetrominoSquares) do
-        square:render()
+        square:render(self.unit)
     end
 
     -- Render current playable tetromino
-    self.currentTetromino:render()
+    self.currentTetromino:render(self.unit)
+
+    -- Render current held piece
+    self:renderHeldPiece()
+end
+
+function Board:renderHeldPiece()
+    self:renderBackground(11, 1, 16, 5, self.unit)
+    if self.heldTetromino then
+        id = self.heldTetromino.id
+        local heldPieceToRender = Tetromino:new(id, properties.HOLD[id],
+            properties.COLORS[id])
+        heldPieceToRender:render(self.unit)
+    end
 end
 
 function Board:getTetrominoSquareIndex(squares, x, y)
