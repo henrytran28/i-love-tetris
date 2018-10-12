@@ -1,10 +1,10 @@
-local colors = require("colors")
-local Tetromino = require("tetromino")
-local properties = require("properties")
-local Movement = require("movement")
-local Randomizer = require("randomizer")
-local Matrix = require("matrix")
-local utils = require("utils")
+local colors = require("src/colors/colors")
+local Tetromino = require("src/tetromino/tetromino")
+local properties = require("src/tetromino/properties")
+local Movement = require("src/movement/movement")
+local Randomizer = require("src/randomizer/randomizer")
+local Matrix = require("src/board/matrix")
+local utils = require("src/utils/utils")
 
 local Board = {
     width = 10,
