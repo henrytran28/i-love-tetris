@@ -100,10 +100,10 @@ function Board:holdCurrentTetromino()
     self.ghostTetromino = self:getGhostTetromino()
 end
 
-function Board:renderBackground(startX, startY, endX, endY)
-    unit = properties.unit
-    for i = startX, endX - 1, 1 do
-        for j = startY, endY - 1, 1 do
+function Board:renderBackground(xOffset, yOffset, xEnd, yEnd)
+    unit = properties.UNIT
+    for i = xOffset,  xEnd - 1, 1 do
+        for j = yOffset, yEnd - 1, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
                 ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
@@ -119,8 +119,8 @@ function Board:render()
     self:updateMatrices()
 
     -- Render the background
-    self:renderBackground(self.xOffset, self.yOffset, self.width + xOffset,
-        self.height + yOffset - 2)
+    self:renderBackground(properties.XOFFSET, properties.YOFFSET,
+        properties.XOFFSET + self.width, properties.YOFFSET + self.height)
 
     -- Render the ghost tetromino
     self.ghostTetromino:render()
