@@ -1,6 +1,6 @@
-local Point = require("point")
-local colors = require("colors")
-local wallKickTable = require("wall_kick_table")
+local Point = require("src/point/point")
+local colors = require("src/colors/colors")
+local wallKickTable = require("src/tetromino/wall_kick_table")
 
 local properties = {
     UNIT = 30,

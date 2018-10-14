@@ -1,5 +1,5 @@
-local properties = require("properties")
-local Tetromino = require("tetromino")
+local properties = require("src/tetromino/properties")
+local Tetromino = require("src/tetromino/tetromino")
 
 local Randomizer = {
     list = {}
