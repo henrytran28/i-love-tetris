@@ -1,4 +1,4 @@
-local properties = require("src/tetromino/properties")
+local properties = require("tetromino/properties")
 
 local Movement = {}
 
