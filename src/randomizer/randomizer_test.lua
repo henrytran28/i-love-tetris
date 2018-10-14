@@ -1,4 +1,4 @@
-local Randomizer = require("src/randomizer/randomizer")
+local Randomizer = require("randomizer/randomizer")
 
 describe("#Randomizer", function() -- tagged as "Randomizer"
     it("New List", function()
@@ -17,7 +17,7 @@ describe("#Randomizer", function() -- tagged as "Randomizer"
         end
     end)
 
-    it("Next", function() 
+    it("Next", function()
         for i = 7, 1, -1 do
             tetromino = Randomizer:next()
             idExists = false

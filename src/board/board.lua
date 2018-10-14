@@ -1,10 +1,11 @@
-local colors = require("src/colors/colors")
-local Tetromino = require("src/tetromino/tetromino")
-local properties = require("src/tetromino/properties")
-local Movement = require("src/movement/movement")
-local Randomizer = require("src/randomizer/randomizer")
-local Matrix = require("src/board/matrix")
-local utils = require("src/utils/utils")
+local colors = require("colors/colors")
+local Tetromino = require("tetromino/tetromino")
+local properties = require("tetromino/properties")
+local constants = require("constants")
+local Movement = require("movement/movement")
+local Randomizer = require("randomizer/randomizer")
+local Matrix = require("board/matrix")
+local utils = require("utils/utils")
 
 local Board = {}
 
@@ -100,10 +101,10 @@ function Board:holdCurrentTetromino()
     self.ghostTetromino = self:getGhostTetromino()
 end
 
-function Board:renderBackground(xOffset, yOffset, xEnd, yEnd)
-    unit = properties.UNIT
-    for i = xOffset,  xEnd - 1, 1 do
-        for j = yOffset, yEnd - 1, 1 do
+function Board:renderBackground()
+    local unit = constants.UNIT
+    for i = 0, self.width - 1, 1 do
+        for j = 0, self.height - 3, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
                 ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
@@ -119,8 +120,7 @@ function Board:render()
     self:updateMatrices()
 
     -- Render the background
-    self:renderBackground(properties.XOFFSET, properties.YOFFSET,
-        properties.XOFFSET + self.width, properties.YOFFSET + self.height)
+    self:renderBackground()
 
     -- Render the ghost tetromino
     self.ghostTetromino:render()
@@ -132,19 +132,6 @@ function Board:render()
 
     -- Render current playable tetromino
     self.currentTetromino:render()
-
-    -- Render current held piece
-    self:renderHeldPiece()
-end
-
-function Board:renderHeldPiece()
-    self:renderBackground(1, 1, 6, 5)
-    if self.heldTetromino then
-        id = self.heldTetromino.id
-        local heldPieceToRender = Tetromino:new(id, properties.HOLD[id],
-            properties.COLORS[id])
-        heldPieceToRender:render()
-    end
 end
 
 function Board:getTetrominoSquareIndex(squares, x, y)

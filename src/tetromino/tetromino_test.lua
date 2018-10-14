@@ -1,9 +1,9 @@
-local Tetromino = require("src/tetromino/tetromino")
-local colors = require("src/colors/colors")
-local Point = require("src/point/point")
-local RotationState = require("src/tetromino/rotation_state")
-local properties = require("src/tetromino/properties")
-local Square = require("src/square/square")
+local Tetromino = require("tetromino/tetromino")
+local colors = require("colors/colors")
+local Point = require("point/point")
+local RotationState = require("tetromino/rotation_state")
+local properties = require("tetromino/properties")
+local Square = require("square/square")
 
 describe("#Tetromino", function() -- tagged as "Tetromino"
     it("Constructor", function()
