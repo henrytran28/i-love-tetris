@@ -1,5 +1,5 @@
-local Board = require("src/board/board")
-local timer = require("src/keyboard/timer")
+local Board = require("board/board")
+local timer = require("keyboard/timer")
 local config = require("config")
 
 function love.keypressed(key, scancode, isrepeat)

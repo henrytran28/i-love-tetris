@@ -1,6 +1,6 @@
-local Square = require("src/square/square")
-local Point = require("src/point/point")
-local colors = require("src/colors/colors")
+local Square = require("square/square")
+local Point = require("point/point")
+local colors = require("colors/colors")
 
 describe("#Square", function() -- tagged as "Square"
     it("Constructor", function()
