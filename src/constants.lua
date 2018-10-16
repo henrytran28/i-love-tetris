@@ -1,7 +1,7 @@
 local constants = {
     UNIT = 30,
-    HEIGHT = 22,
-    WIDTH = 10
+    WINDOW_WIDTH = 510,
+    WINDOW_HEIGHT = 600
 }
 
 -- function to make table read-only

@@ -103,7 +103,7 @@ end
 
 function Board:renderBackground()
     local unit = constants.UNIT
-    for i = 0, self.width - 1, 1 do
+    for i = 7, self.width + 6, 1 do
         for j = 0, self.height - 3, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
                 ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
