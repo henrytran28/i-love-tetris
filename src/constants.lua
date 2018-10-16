@@ -16,6 +16,6 @@ function protect(table)
     });
 end
 
-constants = protect(constants)
+local constants = protect(constants)
 
 return constants
