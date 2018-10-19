@@ -1,13 +1,11 @@
 local board = require("board/board")
-local utils = require("utils/utils")
 local Tetromino = require("tetromino/tetromino")
 local properties = require("tetromino/properties")
 local colors = require("colors/colors")
-local constants = require("constants")
 
 local Tetrion = {}
 
-function Tetrion:new(board, width, height)
+function Tetrion:new(board)
     local tetrion = {
         board = board
     }
