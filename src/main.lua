@@ -1,12 +1,15 @@
-require("keyboard/keyboard")
-
+local keyboard = require("keyboard/keyboard")
 local Board = require("board/board")
+local constants = require("constants")
+local Tetrion = require("tetrion/tetrion")
 
-unit = 40
-width = Board.width * unit
-height = (Board.height - 2) * unit
-love.window.setMode(width, height, nil)
+local board = Board:new(10, 22)
+tetrion = Tetrion:new(board)
+
+keyboard.init(board)
+love.window.setMode(constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT, nil)
 
 function love.draw()
-    Board:render()
+    board:render()
+    tetrion:render()
 end
