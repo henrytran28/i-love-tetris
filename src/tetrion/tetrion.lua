@@ -20,13 +20,13 @@ function Tetrion:render()
     love.graphics.rectangle("fill", 0, 0, 210, 600)
 
     -- Render the held piece background
-    self:renderHeldPiecePreview()
+    self:renderHeldPieceBackground()
 
     -- Render the held piece
     self:renderHeldPiece()
 end
 
-function Tetrion:renderHeldPiecePreview()
+function Tetrion:renderHeldPieceBackground()
     love.graphics.setColor(colors.JET)
     love.graphics.rectangle("fill", 30, 30, 150, 150)
 end
