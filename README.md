@@ -6,7 +6,7 @@ A Tetris clone written in [Lua](https://www.lua.org/) with [LÖVE](https://love2
 
 Run `love` on the `src` directory, for example:
 
-    love src
+    love src/
 
 ## Running Tests
 
@@ -14,4 +14,4 @@ Tests can be run using [Busted](https://olivinelabs.com/busted/).
 
 To run all tests, use the following command:
 
-    busted --pattern "_test" src
+    busted --pattern "_test" src/
