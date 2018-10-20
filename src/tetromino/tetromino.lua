@@ -1,8 +1,8 @@
-local Square = require("square")
-local Point = require("point")
-local colors = require("colors")
-local properties = require("properties")
-local rotationState = require("rotation_state")
+local Square = require("square/square")
+local Point = require("point/point")
+local colors = require("colors/colors")
+local properties = require("tetromino/properties")
+local rotationState = require("tetromino/rotation_state")
 
 local Tetromino = {}
 

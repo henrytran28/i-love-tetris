@@ -1,15 +1,32 @@
-local colors = require("colors")
-local Tetromino = require("tetromino")
-local properties = require("properties")
-local Movement = require("movement")
-local Randomizer = require("randomizer")
-local Matrix = require("matrix")
-local utils = require("utils")
+local colors = require("colors/colors")
+local Tetromino = require("tetromino/tetromino")
+local properties = require("tetromino/properties")
+local constants = require("constants")
+local Movement = require("movement/movement")
+local Randomizer = require("randomizer/randomizer")
+local Matrix = require("board/matrix")
+local utils = require("utils/utils")
 
-local Board = {
-    width = 10,
-    height = 22
-}
+local Board = {}
+
+function Board:new(width, height)
+    local board = {
+        width = width,
+        height = height,
+        boardTetrominosMatrix = Matrix:new(width, height),
+        boardTetrominoSquares = {},
+        holdable = true,
+        heldTetromino = nil
+    }
+    self.__index = self
+    setmetatable(board, self)
+    Randomizer:newList()
+    board.currentTetromino = Randomizer:next()
+    board.nextTetromino = Randomizer:next()
+    board.ghostTetromino = board:getGhostTetromino()
+    board.movement = Movement:init(board)
+    return board
+end
 
 function Board:getGhostTetromino()
     self:updateMatrices()
@@ -85,8 +102,9 @@ function Board:holdCurrentTetromino()
 end
 
 function Board:renderBackground()
-    for i = 0, self.width, 1 do
-        for j = 0, self.height - 2, 1 do
+    local unit = constants.UNIT
+    for i = 7, self.width + 6, 1 do
+        for j = 0, self.height - 3, 1 do
             if (i % 2 == 0 and j % 2 == 0) or
                 ((i + 1) % 2 == 0 and (j + 1) % 2 == 0) then
                 love.graphics.setColor(colors.CHARCOAL)
@@ -149,16 +167,7 @@ function Board:dropLines(indices)
             end
         end
     end
+    self.ghostTetromino = self:getGhostTetromino()
 end
-
-Randomizer:newList()
-Board.currentTetromino = Randomizer:next()
-Board.nextTetromino = Randomizer:next()
-Board.movement = Movement:init(Board)
-Board.boardTetrominoSquares = {}
-Board.boardTetrominosMatrix = Matrix:new(Board.width, Board.height)
-Board.ghostTetromino = Board:getGhostTetromino()
-Board.holdable = true
-Board.heldTetromino = nil
 
 return Board

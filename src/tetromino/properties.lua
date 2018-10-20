@@ -1,6 +1,6 @@
-local Point = require("point")
-local colors = require("colors")
-local wallKickTable = require("wall_kick_table")
+local Point = require("point/point")
+local colors = require("colors/colors")
+local wallKickTable = require("tetromino/wall_kick_table")
 
 local properties = {
     LAYOUTS = {
@@ -20,6 +20,15 @@ local properties = {
         S = Point:new(3, 19),
         Z = Point:new(3, 19),
         T = Point:new(3, 19)
+    },
+    HOLD = {
+        O = Point:new(-4.5, 15.5),
+        I = Point:new(-5.5, 16),
+        J = Point:new(-5, 15.5),
+        L = Point:new(-5, 15.5),
+        S = Point:new(-5, 15.5),
+        Z = Point:new(-5, 15.5),
+        T = Point:new(-5, 15.5)
     },
     ROTATION_POINTS = {
         O = Point:new(1.0, 1.0),
