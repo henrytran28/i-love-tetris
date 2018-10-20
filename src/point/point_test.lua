@@ -1,4 +1,4 @@
-local Point = require("point")
+local Point = require("point/point")
 
 describe("#Point", function() -- tagged as "Point"
     it("Constructor", function()
