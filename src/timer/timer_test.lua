@@ -30,10 +30,4 @@ describe("#Timer", function() -- tagged as "Timer"
         timer:reset()
         assert.are.equal(0, timer.value)
     end)
-
-    it("CalculateTime", function()
-        assert.are.equal(0, Timer.calculateTime(0, 1, 0))
-        assert.are.equal(1, Timer.calculateTime(0, 1, 100))
-        assert.are.equal(0.5, Timer.calculateTime(0, 1, 50))
-    end)
 end)
