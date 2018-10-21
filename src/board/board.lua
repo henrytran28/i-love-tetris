@@ -170,4 +170,13 @@ function Board:dropLines(indices)
     self.ghostTetromino = self:getGhostTetromino()
 end
 
+function Board:obstacleBelow()
+    for _, square in pairs(self.currentTetromino.squares) do
+        if square.y <= 0 or self.boardTetrominosMatrix:isFilled(square.x, square.y - 1) then
+            return true
+        end
+    end
+    return false
+end
+
 return Board

@@ -15,6 +15,10 @@ function Timer:subtract(dt)
     self.value = self.value - dt
 end
 
+function Timer:exceeds(time)
+    return self.value >= time
+end
+
 function Timer:reset()
     self.value = 0
 end
