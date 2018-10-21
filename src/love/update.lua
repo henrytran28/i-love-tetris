@@ -1,6 +1,6 @@
 local config = require("config")
 
-local Timer = require("keyboard/timer")
+local Timer = require("timer/timer")
 leftTimer = Timer:new()
 rightTimer = Timer:new()
 downTimer = Timer:new()
