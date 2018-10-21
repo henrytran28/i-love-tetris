@@ -1,8 +1,8 @@
 local config = {}
 
-config.leftRightSpeedPercent = 50
-config.softDropSpeedPercent = 50
-config.delayedAutoShiftPercent = 50
-config.gravitySpeed = 50
+config.leftRightSpeedPercent = 0
+config.softDropSpeedPercent = 0
+config.delayedAutoShiftPercent = 100
+config.gravitySpeed = 0
 
 return config

@@ -1,31 +1,44 @@
 local config = require("config")
 
+local Timer = require("keyboard/timer")
+leftTimer = Timer:new()
+rightTimer = Timer:new()
+downTimer = Timer:new()
+gravityTimer = Timer:new()
+
 function love.update(dt)
     if love.keyboard.isDown("left") then
-        timer.left = timer.left + dt
-        if timer.left >= timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
-            timer.left = timer.left - timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent)
+        leftTimer:add(dt)
+        if leftTimer.value >= Timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
+            leftTimer:subtract(Timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent))
             board.movement:moveLeft()
         end
+    else
+        leftTimer:reset()
     end
 
     if love.keyboard.isDown("right") then
-        timer.right = timer.right + dt
-        if timer.right >= timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
-            timer.right = timer.right - timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent)
+        rightTimer:add(dt)
+        if rightTimer.value >= Timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
+            rightTimer:subtract(Timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent))
             board.movement:moveRight()
         end
-    end
-    if love.keyboard.isDown("down") then
-        timer.down = timer.down + dt
-        if timer.down >= timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
-            timer.down = timer.down - timer.calculateTime(0.1, 0.01, config.softDropSpeedPercent)
-            board.movement:moveDown()
-        end
+    else
+        rightTimer:reset()
     end
 
-    timer.gravity = timer.gravity + dt
-    if timer.gravity >= timer.calculateTime(0.1, 0.3, config.gravitySpeed) then
+    if love.keyboard.isDown("down") then
+        downTimer:add(dt)
+        if downTimer.value >= Timer.calculateTime(0.1, 0.3, config.delayedAutoShiftPercent) then
+            downTimer:subtract(Timer.calculateTime(0.1, 0.01, config.leftRightSpeedPercent))
+            board.movement:moveDown()
+        end
+    else
+        downTimer:reset()
+    end
+
+    gravityTimer:add(dt)
+    if gravityTimer.value <= 0 then
         board.movement:gravitate()
     end
 end

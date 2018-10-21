@@ -21,15 +21,3 @@ function love.keypressed(key, scancode, isrepeat)
         board:holdCurrentTetromino()
     end
 end
-
-function love.keyreleased(key, scancode, isrepeat)
-    if key == "left" then
-        timer.left = 0
-    end
-    if key == "right" then
-        timer.right = 0
-    end
-    if key == "down" then
-        timer.down = 0
-    end
-end

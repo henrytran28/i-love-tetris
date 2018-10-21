@@ -129,7 +129,7 @@ end
 
 function Movement:gravitate()
     self:moveDown()
-    timer.gravity = 0
+    gravityTimer:reset()
 end
 
 return Movement
