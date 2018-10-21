@@ -23,8 +23,4 @@ function Timer:reset()
     self.value = 0
 end
 
-function Timer.calculateTime(timeAtMin, timeAtMax, percentSetting)
-    return ((timeAtMax - timeAtMin) / 100) * percentSetting + timeAtMin
-end
-
 return Timer

@@ -1,4 +1,5 @@
 local settings = require("settings/settings")
+local utils = require("utils/utils")
 
 local Timer = require("timer/timer")
 local leftTimer = Timer:new()
@@ -10,8 +11,8 @@ local tetrominoExpiryTimer = Timer:new()
 function love.update(dt)
     if love.keyboard.isDown("left") then
         leftTimer:add(dt)
-        if leftTimer:exceeds(Timer.calculateTime(0.1, 0.3, settings.delayedAutoShiftPercent)) then
-            leftTimer:subtract(Timer.calculateTime(0.1, 0.01, settings.leftRightSpeedPercent))
+        if leftTimer:exceeds(utils.linearInterpolation(0.1, 0.3, settings.delayedAutoShiftPercent)) then
+            leftTimer:subtract(utils.linearInterpolation(0.1, 0.01, settings.leftRightSpeedPercent))
             board.movement:moveLeft()
         end
     else
@@ -20,8 +21,8 @@ function love.update(dt)
 
     if love.keyboard.isDown("right") then
         rightTimer:add(dt)
-        if rightTimer:exceeds(Timer.calculateTime(0.1, 0.3, settings.delayedAutoShiftPercent)) then
-            rightTimer:subtract(Timer.calculateTime(0.1, 0.01, settings.leftRightSpeedPercent))
+        if rightTimer:exceeds(utils.linearInterpolation(0.1, 0.3, settings.delayedAutoShiftPercent)) then
+            rightTimer:subtract(utils.linearInterpolation(0.1, 0.01, settings.leftRightSpeedPercent))
             board.movement:moveRight()
         end
     else
@@ -30,8 +31,8 @@ function love.update(dt)
 
     if love.keyboard.isDown("down") then
         downTimer:add(dt)
-        if downTimer:exceeds(Timer.calculateTime(0.1, 0.3, settings.delayedAutoShiftPercent)) then
-            downTimer:subtract(Timer.calculateTime(0.1, 0.01, settings.leftRightSpeedPercent))
+        if downTimer:exceeds(utils.linearInterpolation(0.1, 0.3, settings.delayedAutoShiftPercent)) then
+            downTimer:subtract(utils.linearInterpolation(0.1, 0.01, settings.leftRightSpeedPercent))
             board.movement:moveDown()
         end
     else
@@ -39,7 +40,7 @@ function love.update(dt)
     end
 
     gravityTimer:add(dt)
-    if gravityTimer:exceeds(Timer.calculateTime(0.1, 0.3, settings.gravitySpeedPercent)) then
+    if gravityTimer:exceeds(utils.linearInterpolation(0.1, 0.3, settings.gravitySpeedPercent)) then
         board.movement:moveDown()
         gravityTimer:reset()
     end

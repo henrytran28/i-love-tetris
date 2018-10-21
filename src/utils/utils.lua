@@ -14,4 +14,8 @@ function utils.shallowcopy(orig)
     return copy
 end
 
+function utils.linearInterpolation(min, max, percent)
+    return ((max - min) / 100) * percent + min
+end
+
 return utils
