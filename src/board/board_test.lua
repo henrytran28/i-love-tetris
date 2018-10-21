@@ -1,7 +1,11 @@
 local Board = require("board/board")
+local properties = require("tetromino/properties")
 local Tetromino = require("tetromino/tetromino")
+local inspect = require("inspect")
 
 describe("#Board", function() -- tagged as "board"
+    local board
+
     local function tableContains(table, value)
         for i = 1, #table do
             if table[i] == value then return true end
@@ -9,9 +13,12 @@ describe("#Board", function() -- tagged as "board"
         return false
     end
 
+    before_each(function()
+        board = Board:new(10, 22)
+    end)
+
     it("Constructor", function()
         local ids = {"O", "I", "J", "L", "S", "Z", "T"}
-        local board = Board:new(10, 22)
         assert.are.equal(board.width, 10)
         assert.are.equal(board.height, 22)
         assert.is.falsy(next(board.boardTetrominoSquares))
@@ -23,8 +30,23 @@ describe("#Board", function() -- tagged as "board"
         assert.True(tableContains(ids, board.ghostTetromino.id))
     end)
 
+    it("GetGhostTetromino", function()
+        board.currentTetromino = Tetromino:new("O", properties.SPAWN["O"],
+            properties.COLORS["O"])
+        board.ghostTetromino = board:getGhostTetromino()
+        ghostSquares = board.ghostTetromino.squares
+
+        assert(ghostSquares[1].x, 4)
+        assert(ghostSquares[1].y, 0)
+        assert(ghostSquares[2].x, 5)
+        assert(ghostSquares[2].y, 0)
+        assert(ghostSquares[3].x, 5)
+        assert(ghostSquares[3].y, 1)
+        assert(ghostSquares[4].x, 4)
+        assert(ghostSquares[4].y, 1)
+    end)
+
     it("CycleNextTetromino", function()
-        local board = Board:new(10, 22)
         for i = 0, 99, 1 do
             lastTetrominoID = board.currentTetromino.id
             board:cycleNextTetromino()

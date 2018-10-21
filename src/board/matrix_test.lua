@@ -1,6 +1,8 @@
 local Matrix = require("board/matrix")
 
 describe("#Matrix", function() -- tagged as "Matrix"
+    local matrix
+
     before_each(function()
         matrix = Matrix:new(10, 22)
     end)
