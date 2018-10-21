@@ -1,5 +1,3 @@
-local timer = require("keyboard/timer")
-
 function love.keypressed(key, scancode, isrepeat)
     if key == "left" then
         board.movement:moveLeft()

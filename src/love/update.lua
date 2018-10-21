@@ -1,4 +1,3 @@
-local timer = require("keyboard/timer")
 local config = require("config")
 
 function love.update(dt)
@@ -23,5 +22,10 @@ function love.update(dt)
             timer.down = timer.down - timer.calculateTime(0.1, 0.01, config.softDropSpeedPercent)
             board.movement:moveDown()
         end
+    end
+
+    timer.gravity = timer.gravity + dt
+    if timer.gravity >= timer.calculateTime(0.1, 0.3, config.gravitySpeed) then
+        board.movement:gravitate()
     end
 end

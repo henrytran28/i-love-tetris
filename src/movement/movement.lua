@@ -127,4 +127,9 @@ function Movement:wallKickTestPass(xOffset, yOffset)
     return true
 end
 
+function Movement:gravitate()
+    self:moveDown()
+    timer.gravity = 0
+end
+
 return Movement
