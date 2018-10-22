@@ -40,7 +40,7 @@ function love.update(dt)
     end
 
     gravityTimer:add(dt)
-    if gravityTimer:exceeds(utils.linearInterpolation(0.1, 0.3, settings.gravitySpeedPercent)) then
+    if gravityTimer:exceeds(utils.linearInterpolation(1.0, 0.5, settings.gravitySpeedPercent)) then
         board.movement:moveDown()
         gravityTimer:reset()
     end
