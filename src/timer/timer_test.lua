@@ -1,4 +1,3 @@
-
 local Timer = require("timer/timer")
 
 describe("#Timer", function() -- tagged as "Timer"
