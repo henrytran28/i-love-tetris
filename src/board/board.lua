@@ -6,6 +6,8 @@ local Movement = require("movement/movement")
 local Randomizer = require("randomizer/randomizer")
 local Matrix = require("board/matrix")
 local utils = require("utils/utils")
+local Timer = require("timer/timer")
+local settings = require("settings/settings")
 
 local Board = {}
 
@@ -16,7 +18,9 @@ function Board:new(width, height)
         boardTetrominosMatrix = Matrix:new(width, height),
         boardTetrominoSquares = {},
         holdable = true,
-        heldTetromino = nil
+        heldTetromino = nil,
+        gravityTimer = Timer:new(),
+        tetrominoExpirationTimer = Timer:new()
     }
     self.__index = self
     setmetatable(board, self)
@@ -177,6 +181,22 @@ function Board:obstacleBelow()
         end
     end
     return false
+end
+
+function Board:handleGravity(dt)
+    self.gravityTimer:add(dt)
+    if self.gravityTimer:exceeds(utils.linearInterpolation(1.0, 0.5, settings.gravitySpeedPercent)) then
+        self.movement:moveDown()
+        self.gravityTimer:reset()
+    end
+
+    if self:obstacleBelow() then
+        self.tetrominoExpirationTimer:add(dt)
+        if self.tetrominoExpirationTimer:exceeds(1.0) then
+            self.movement:hardDrop()
+            self.tetrominoExpirationTimer:reset()
+        end
+    end
 end
 
 return Board
