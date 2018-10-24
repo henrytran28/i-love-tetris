@@ -1,7 +1,6 @@
 local Timer = require("timer/timer")
 local utils = require("utils/utils")
 local settings = require("settings/settings")
-local movement = require("movement/movement")
 
 local Controller = {}
 
@@ -18,26 +17,13 @@ function Controller:new(board)
 end
 
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
-    if key == "left" then
-        self.board.movement:moveLeft()
-    end
-    if key == "right" then
-        self.board.movement:moveRight()
-    end
-    if key == "down" then
-        self.board.movement:moveDown()
-    end
-    if key == "up" then
-        self.board.movement:rotateCw()
-    end
-    if key == "z" then
-        self.board.movement:rotateCcw()
-    end
-    if key == "space" then
-        self.board.movement:hardDrop()
-    end
-    if key == "lshift" or key == "rshift" or key == "c" then
-        self.board:holdCurrentTetromino()
+    for action, keyStrList in pairs(settings.keyBindings) do
+        for _, keyStr in pairs(keyStrList) do
+            if key == keyStr then
+                -- https://stackoverflow.com/questions/45016391
+                loadstring("local self = ...; "..action.."()")(self)
+            end
+        end
     end
 end
 
