@@ -16,12 +16,25 @@ function Controller:new(board)
     return controller
 end
 
+Controller.funcMap = {
+    ['moveLeft'] = 'self.board.movement:moveLeft()',
+    ['moveRight'] = 'self.board.movement:moveRight()',
+    ['moveDown'] = 'self.board.movement:moveDown()',
+    ['rotateCw'] = 'self.board.movement:rotateCw()',
+    ['rotateCcw'] = 'self.board.movement:rotateCcw()',
+    ['hardDrop'] = 'self.board.movement:hardDrop()',
+    ['hold'] = 'self.board:holdCurrentTetromino()',
+}
+
+function Controller:run(action)
+    loadstring("local self = ...; "..self.funcMap[action])(self)
+end
+
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
     for action, keyStrList in pairs(settings.keyBindings) do
         for _, keyStr in pairs(keyStrList) do
             if key == keyStr then
-                -- https://stackoverflow.com/questions/45016391
-                loadstring("local self = ...; "..action.."()")(self)
+                self:run(action)
             end
         end
     end
