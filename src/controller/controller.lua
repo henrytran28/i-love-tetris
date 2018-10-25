@@ -56,7 +56,7 @@ function Controller:handleRepeatKeys(dt)
     if love.keyboard.isDown("down") then
         self.downTimer:add(dt)
         if self.downTimer:exceeds(utils.linearInterpolation(0.1, 0.3, settings.delayedAutoShiftPercent)) then
-            self.downTimer:subtract(utils.linearInterpolation(0.1, 0.01, settings.leftRightSpeedPercent))
+            self.downTimer:subtract(utils.linearInterpolation(0.1, 0.01, settings.softDropSpeedPercent))
             self.board.movement:moveDown()
         end
     else
