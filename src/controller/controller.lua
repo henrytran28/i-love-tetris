@@ -16,25 +16,17 @@ function Controller:new(board)
     return controller
 end
 
-Controller.funcMap = {
-    ['moveLeft'] = 'self.board.movement:moveLeft()',
-    ['moveRight'] = 'self.board.movement:moveRight()',
-    ['moveDown'] = 'self.board.movement:moveDown()',
-    ['rotateCw'] = 'self.board.movement:rotateCw()',
-    ['rotateCcw'] = 'self.board.movement:rotateCcw()',
-    ['hardDrop'] = 'self.board.movement:hardDrop()',
-    ['hold'] = 'self.board:holdCurrentTetromino()',
-}
-
-function Controller:run(action)
-    loadstring("local self = ...; "..self.funcMap[action])(self)
-end
-
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
     for action, keyStrList in pairs(settings.keyBindings) do
         for _, keyStr in pairs(keyStrList) do
             if key == keyStr then
-                self:run(action)
+                if action == 'moveLeft' then self.board.movement:moveLeft() end
+                if action == 'moveRight' then self.board.movement:moveRight() end
+                if action == 'moveDown' then self.board.movement:moveDown() end
+                if action == 'rotateCw' then self.board.movement:rotateCw() end
+                if action == 'rotateCcw' then self.board.movement:rotateCcw() end
+                if action == 'hardDrop' then self.board.movement:hardDrop() end
+                if action == 'hold' then self.board:holdCurrentTetromino() end
             end
         end
     end
