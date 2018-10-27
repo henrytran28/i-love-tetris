@@ -12,6 +12,15 @@ function Controller:new(board)
             moveRight = Timer:new(0, utils.linearInterpolation(0.1, 0.01, settings.leftRightSpeedPercent)),
             moveDown = Timer:new(0, utils.linearInterpolation(0.1, 0.01, settings.softDropSpeedPercent)),
         },
+        funcTable = {
+            moveLeft = "self.board.movement:moveLeft()",
+            moveRight = "self.board.movement:moveRight()",
+            moveDown = "self.board.movement:moveDown()",
+            rotateCw = "self.board.movement:rotateCw()",
+            rotateCcw = "self.board.movement:rotateCcw()",
+            hardDrop = "self.board.movement:hardDrop()",
+            hold = "self.board:holdCurrentTetromino()",
+        }
     }
     self.__index = self
     setmetatable(controller, self)
@@ -19,13 +28,7 @@ function Controller:new(board)
 end
 
 function Controller:run(action)
-    if action == 'moveLeft' then self.board.movement:moveLeft() end
-    if action == 'moveRight' then self.board.movement:moveRight() end
-    if action == 'moveDown' then self.board.movement:moveDown() end
-    if action == 'rotateCw' then self.board.movement:rotateCw() end
-    if action == 'rotateCcw' then self.board.movement:rotateCcw() end
-    if action == 'hardDrop' then self.board.movement:hardDrop() end
-    if action == 'hold' then self.board:holdCurrentTetromino() end
+    loadstring("local self = ...; " .. self.funcTable[action])(self)
 end
 
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
