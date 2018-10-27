@@ -5,12 +5,12 @@ return {
     gravitySpeedPercent = 50,
 
     keyBindings = {
-        ['moveLeft'] = {'left'},
-        ['moveRight'] = {'right'},
-        ['moveDown'] = {'down'},
-        ['rotateCw'] = {'up'},
-        ['rotateCcw'] = {'z'},
-        ['hardDrop'] = {'space'},
-        ['hold'] = {'lshift', 'rshift', 'c'}
+        moveLeft = {'left'},
+        moveRight = {'right'},
+        moveDown = {'down'},
+        rotateCw = {'up'},
+        rotateCcw = {'z'},
+        hardDrop = {'space'},
+        hold = {'lshift', 'rshift', 'c'}
     }
 }
