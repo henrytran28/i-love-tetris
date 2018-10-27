@@ -19,8 +19,8 @@ function Board:new(width, height)
         boardTetrominoSquares = {},
         holdable = true,
         heldTetromino = nil,
-        gravityTimer = Timer:new(),
-        tetrominoExpirationTimer = Timer:new()
+        gravityTimer = Timer:new(0, utils.linearInterpolation(1.0, 0.5, settings.gravitySpeedPercent)),
+        tetrominoExpirationTimer = Timer:new(0, 1.0)
     }
     self.__index = self
     setmetatable(board, self)
@@ -185,14 +185,14 @@ end
 
 function Board:handleGravity(dt)
     self.gravityTimer:add(dt)
-    if self.gravityTimer:exceeds(utils.linearInterpolation(1.0, 0.5, settings.gravitySpeedPercent)) then
+    if self.gravityTimer:exceeds(self.gravityTimer.max) then
         self.movement:moveDown()
         self.gravityTimer:reset()
     end
 
     if self:obstacleBelow() then
         self.tetrominoExpirationTimer:add(dt)
-        if self.tetrominoExpirationTimer:exceeds(1.0) then
+        if self.tetrominoExpirationTimer:exceeds(self.tetrominoExpirationTimer.max) then
             self.movement:hardDrop()
             self.tetrominoExpirationTimer:reset()
         end

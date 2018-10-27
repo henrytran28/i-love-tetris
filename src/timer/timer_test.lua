@@ -2,11 +2,12 @@ local Timer = require("timer/timer")
 
 describe("#Timer", function() -- tagged as "Timer"
     before_each(function()
-        timer = Timer:new()
+        timer = Timer:new(0, 1)
     end)
 
     it("Constructor", function()
         assert.are.equal(0, timer.value)
+        assert.are.equal(1, timer.max)
     end)
 
     it("Add and Subtract", function()

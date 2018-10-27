@@ -1,7 +1,10 @@
 local Timer = {}
 
-function Timer:new()
-    local timer = {value = 0}
+function Timer:new(value, max)
+    local timer = {
+        value = value,
+        max = max,
+    }
     self.__index = self
     setmetatable(timer, self)
     return timer
