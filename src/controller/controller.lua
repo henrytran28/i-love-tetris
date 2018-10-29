@@ -1,6 +1,7 @@
 local Timer = require("timer/timer")
 local utils = require("utils/utils")
 local settings = require("settings/settings")
+local Action = require("controller/action")
 
 local Controller = {}
 
@@ -12,14 +13,14 @@ function Controller:new(board)
             moveRight = Timer:new(0, utils.linearInterpolation(0.1, 0.01, settings.leftRightSpeedPercent)),
             moveDown = Timer:new(0, utils.linearInterpolation(0.1, 0.01, settings.softDropSpeedPercent)),
         },
-        funcTable = {
-            moveLeft = "self.board.movement:moveLeft()",
-            moveRight = "self.board.movement:moveRight()",
-            moveDown = "self.board.movement:moveDown()",
-            rotateCw = "self.board.movement:rotateCw()",
-            rotateCcw = "self.board.movement:rotateCcw()",
-            hardDrop = "self.board.movement:hardDrop()",
-            hold = "self.board:holdCurrentTetromino()",
+        actions = {
+            moveLeft = Action:new(settings.keyBindings.moveLeft, "self.board.movement:moveLeft()"),
+            moveRight = Action:new(settings.keyBindings.moveRight, "self.board.movement:moveRight()"),
+            moveDown = Action:new(settings.keyBindings.moveDown, "self.board.movement:moveDown()"),
+            rotateCw = Action:new(settings.keyBindings.rotateCw, "self.board.movement:rotateCw()"),
+            rotateCcw = Action:new(settings.keyBindings.rotateCcw, "self.board.movement:rotateCcw()"),
+            hardDrop = Action:new(settings.keyBindings.hardDrop, "self.board.movement:hardDrop()"),
+            hold = Action:new(settings.keyBindings.hold, "self.board:holdCurrentTetromino()"),
         }
     }
     self.__index = self
@@ -28,7 +29,7 @@ function Controller:new(board)
 end
 
 function Controller:run(action)
-    loadstring("local self = ...; " .. self.funcTable[action])(self)
+    loadstring("local self = ...; " .. self.actions[action].funcStr)(self)
 end
 
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
