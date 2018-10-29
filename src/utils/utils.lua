@@ -18,4 +18,18 @@ function utils.linearInterpolation(min, max, percent)
     return ((max - min) / 100) * percent + min
 end
 
+function utils.invertTable(t)
+    local s = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            for _, val in pairs(v) do
+                s[val] = k
+            end
+        else
+            s[v] = k
+        end
+    end
+    return s
+end
+
 return utils

@@ -29,17 +29,13 @@ function Controller:new(board)
 end
 
 function Controller:run(action)
-    loadstring("local self = ...; " .. self.actions[action].funcStr)(self)
+    if action ~= nil then
+        loadstring("local self = ...; " .. self.actions[action].funcStr)(self)
+    end
 end
 
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
-    for action, keyStrList in pairs(settings.keyBindings) do
-        for _, keyStr in pairs(keyStrList) do
-            if key == keyStr then
-                self:run(action)
-            end
-        end
-    end
+    self:run(utils.invertTable(settings.keyBindings)[key])
 end
 
 function Controller:handleRepeatKeys(dt)
