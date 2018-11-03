@@ -1,7 +1,9 @@
 local Board = require("board/board")
 local properties = require("tetromino/properties")
 local Tetromino = require("tetromino/tetromino")
-local inspect = require("inspect")
+local Square = require("square/square")
+local Point = require("point/point")
+local colors = require("colors/colors")
 
 describe("#Board", function() -- tagged as "board"
     local board
@@ -55,5 +57,27 @@ describe("#Board", function() -- tagged as "board"
                     lastTetrominoID)
             end
         end
+    end)
+
+    it("CheckOverlappingSpawn", function()
+        board.boardTetrominosMatrix:fill(5, 19)
+        board.boardTetrominosMatrix:fill(6, 19)
+        board.boardTetrominosMatrix:fill(6, 20)
+        board.currentTetromino = Tetromino:new("L", properties.SPAWN["L"], colors.ASH)
+        board:checkOverlappingSpawn()
+        assert.are_equal(board.currentTetromino.origin.x, properties.SPAWN["L"].x)
+        assert.are_equal(board.currentTetromino.origin.y, properties.SPAWN["L"].y + 1)
+    end)
+
+    it("UpdateMatrices", function()
+       for i = 0, board.width - 1, 1 do
+           for j = 0, board.height - 1, 1 do
+               assert.are.equal(board.boardTetrominosMatrix[i][j], 0)
+           end
+       end
+       table.insert(board.boardTetrominoSquares,
+            Square:new(Point:new(0, 0), colors.ASH))
+       board:updateMatrices()
+       assert.are.equal(board.boardTetrominosMatrix[0][0], 1)
     end)
 end)
