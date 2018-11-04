@@ -47,6 +47,17 @@ describe("#Matrix", function() -- tagged as "Matrix"
         end
     end)
 
+    it("GetFilledIndices", function()
+        filledIndices = {0, 1, 2, 3, 4, 5, 6}
+        assert.is.falsy(next(matrix:getFilledIndices()))
+        for i = 0, 9, 1 do
+            for j = 0, 6, 1 do
+                matrix:fill(i, j)
+            end
+        end
+        assert.are.same(matrix:getFilledIndices(), filledIndices)
+    end)
+
     it("Clear", function()
         for i = 0, 9, 1 do
             for j = 0, 21, 1 do
