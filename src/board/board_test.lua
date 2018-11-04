@@ -75,9 +75,45 @@ describe("#Board", function() -- tagged as "board"
                assert.are.equal(board.boardTetrominosMatrix[i][j], 0)
            end
        end
+
        table.insert(board.boardTetrominoSquares,
             Square:new(Point:new(0, 0), colors.ASH))
        board:updateMatrices()
        assert.are.equal(board.boardTetrominosMatrix[0][0], 1)
+    end)
+
+    it("HoldCurrentTetromino", function()
+        assert.is_nil(board.heldTetromino)
+        assert.is_true(board.holdable)
+
+        -- hold current tetromino and verify value
+        currentTetrominoID = board.currentTetromino.id
+        board:holdCurrentTetromino()
+        assert.are_equal(board.heldTetromino.id, currentTetrominoID)
+
+        -- tetromino not dropped so holding it should not be allowed
+        board:holdCurrentTetromino()
+        -- held tetromino should be the same
+        assert.is_false(board.holdable)
+        assert.are_equal(board.heldTetromino.id, currentTetrominoID)
+
+        -- drop tetromino and hold tetromino
+        nextTetrominoID = board.nextTetromino.id
+        board.movement:hardDrop()
+        board:holdCurrentTetromino()
+        -- held tetromino should swap with current tetromino
+        assert.are_equal(board.heldTetromino.id, nextTetrominoID)
+        assert.are_equal(board.currentTetromino.id, currentTetrominoID)
+
+        -- test held tetromino position gets reset if moved before holding
+        board.currentTetromino:offset(-1, 0)
+        board:holdCurrentTetromino()
+        board.movement:hardDrop()
+        board:holdCurrentTetromino()
+        -- tetromino position should equal spawn position
+        assert.are_equal(board.currentTetromino.origin.x,
+            properties.SPAWN[nextTetrominoID].x)
+        assert.are_equal(board.currentTetromino.origin.y,
+        properties.SPAWN[nextTetrominoID].y)
     end)
 end)
