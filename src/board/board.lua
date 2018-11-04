@@ -6,7 +6,7 @@ local Movement = require("movement/movement")
 local Randomizer = require("randomizer/randomizer")
 local Matrix = require("board/matrix")
 local utils = require("utils/utils")
-local Timer = require("timer/timer")
+local FrameCounter = require("frame_counter/frame_counter")
 local settings = require("settings/settings")
 
 local Board = {}
@@ -19,8 +19,8 @@ function Board:new(width, height)
         boardTetrominoSquares = {},
         holdable = true,
         heldTetromino = nil,
-        gravityTimer = Timer:new(0, utils.linearInterpolation(1.0, 0.5, settings.gravitySpeedPercent)),
-        tetrominoExpirationTimer = Timer:new(0, 1.0)
+        gravityFrameCounter = FrameCounter:new(1/settings.gravitySpeed),
+        expirationFrameCounter = FrameCounter:new(30)
     }
     self.__index = self
     setmetatable(board, self)
@@ -183,18 +183,18 @@ function Board:obstacleBelow()
     return false
 end
 
-function Board:handleGravity(dt)
-    self.gravityTimer:add(dt)
-    if self.gravityTimer:exceeds(self.gravityTimer.max) then
+function Board:handleGravity(frames)
+    self.gravityFrameCounter:add(frames)
+    if self.gravityFrameCounter:exceeds(self.gravityFrameCounter.maxFrames) then
         self.movement:moveDown()
-        self.gravityTimer:reset()
+        self.gravityFrameCounter:reset()
     end
 
     if self:obstacleBelow() then
-        self.tetrominoExpirationTimer:add(dt)
-        if self.tetrominoExpirationTimer:exceeds(self.tetrominoExpirationTimer.max) then
+        self.expirationFrameCounter:add(frames)
+        if self.expirationFrameCounter:exceeds(self.expirationFrameCounter.maxFrames) then
             self.movement:hardDrop()
-            self.tetrominoExpirationTimer:reset()
+            self.expirationFrameCounter:reset()
         end
     end
 end

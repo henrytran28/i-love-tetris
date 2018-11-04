@@ -21,6 +21,7 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 function love.update(dt)
-    controller:handleRepeatKeys(dt)
-    board:handleGravity(dt)
+    local fps = love.timer.getFPS()
+    controller:handleRepeatKeys(dt * fps)
+    board:handleGravity(dt * fps)
 end

@@ -14,10 +14,6 @@ function utils.shallowcopy(orig)
     return copy
 end
 
-function utils.linearInterpolation(min, max, percent)
-    return ((max - min) / 100) * percent + min
-end
-
 function utils.invertTable(t)
     local s = {}
     for k, v in pairs(t) do

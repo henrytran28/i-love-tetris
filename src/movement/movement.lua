@@ -87,8 +87,8 @@ function Movement:hardDrop()
     self.board:clearLines(filledIndices)
     self.board:dropLines(filledIndices)
 
-    self.board.gravityTimer:reset()
-    self.board.tetrominoExpirationTimer:reset()
+    self.board.gravityFrameCounter:reset()
+    self.board.expirationFrameCounter:reset()
 end
 
 function Movement:rotateCw()
