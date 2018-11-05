@@ -20,7 +20,7 @@ function Board:new(width, height)
         holdable = true,
         heldTetromino = nil,
         gravityFrameCounter = FrameCounter:new(1/settings.gravitySpeed),
-        expirationFrameCounter = FrameCounter:new(30)
+        expirationFrameCounter = FrameCounter:new(settings.expiryDelay)
     }
     self.__index = self
     setmetatable(board, self)
