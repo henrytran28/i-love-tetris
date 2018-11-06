@@ -110,7 +110,8 @@ function Board:renderBackground()
                 love.graphics.setColor(colors.CHARCOAL)
             else
                 love.graphics.setColor(colors.JET)
-            end love.graphics.rectangle("fill", i * unit, j * unit, unit, unit)
+            end
+            love.graphics.rectangle("fill", i * unit, j * unit, unit, unit)
         end
     end
 end
