@@ -9,7 +9,6 @@ love.window.setMode(constants.WINDOW_WIDTH, constants.WINDOW_HEIGHT, nil)
 
 local board = Board:new(10, 22)
 local tetrion = Tetrion:new(board)
-
 local controller = Controller:new(board)
 
 function love.draw()
