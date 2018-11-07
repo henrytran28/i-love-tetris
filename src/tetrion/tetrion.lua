@@ -18,17 +18,25 @@ function Tetrion:render()
     -- Render the backdrop
     love.graphics.setColor(colors.CHARCOAL)
     love.graphics.rectangle("fill", 0, 0, 210, 600)
+    love.graphics.rectangle("fill", 510, 0, 210, 600)
 
-    -- Render the held piece background
+    -- Render the held piece and next piece background
     self:renderHeldPieceBackground()
+    self.renderNextPieceBackground()
 
-    -- Render the held piece
+    -- Render the held piece and the next piece
     self:renderHeldPiece()
+    self:renderNextPiece()
 end
 
 function Tetrion:renderHeldPieceBackground()
     love.graphics.setColor(colors.JET)
     love.graphics.rectangle("fill", 30, 30, 150, 150)
+end
+
+function Tetrion:renderNextPieceBackground()
+    love.graphics.setColor(colors.JET)
+    love.graphics.rectangle("fill", 540, 30, 150, 150)
 end
 
 function Tetrion:renderHeldPiece()
@@ -37,6 +45,15 @@ function Tetrion:renderHeldPiece()
         heldPiece = Tetromino:new(heldPieceID,
             properties.HOLD[heldPieceID], properties.COLORS[heldPieceID])
         heldPiece:render()
+    end
+end
+
+function Tetrion:renderNextPiece()
+    if self.board.nextTetromino then
+        nextPieceID = self.board.nextTetromino.id
+        nextPiece = Tetromino:new(nextPieceID,
+            properties.NEXT[nextPieceID], properties.COLORS[nextPieceID])
+        nextPiece:render()
     end
 end
 
