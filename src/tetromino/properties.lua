@@ -30,6 +30,15 @@ local properties = {
         Z = Point:new(-5, 15.5),
         T = Point:new(-5, 15.5)
     },
+    NEXT = {
+        O = Point:new(13.5, 15.5),
+        I = Point:new(12.5, 16),
+        J = Point:new(12, 15.5),
+        L = Point:new(12, 15.5),
+        S = Point:new(12, 15.5),
+        Z = Point:new(12, 15.5),
+        T = Point:new(12, 15.5)
+    },
     ROTATION_POINTS = {
         O = Point:new(1.0, 1.0),
         I = Point:new(2.0, 0.0),
