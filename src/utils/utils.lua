@@ -14,18 +14,16 @@ function utils.shallowcopy(orig)
     return copy
 end
 
-function utils.invertTable(t)
-    local s = {}
-    for k, v in pairs(t) do
+function utils.getKeyFromValue(table, value)
+    for k, v in pairs(table) do
         if type(v) == "table" then
-            for _, val in pairs(v) do
-                s[val] = k
+            for _, v in pairs(v) do
+                if v == value then return k end
             end
         else
-            s[v] = k
+            if v == value then return k end
         end
     end
-    return s
 end
 
 return utils

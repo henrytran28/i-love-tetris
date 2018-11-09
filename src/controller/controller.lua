@@ -35,7 +35,7 @@ function Controller:run(action)
 end
 
 function Controller:handleNonRepeatKeys(key, scancode, isrepeat)
-    self:run(utils.invertTable(settings.keyBindings)[key])
+    self:run(utils.getKeyFromValue(settings.keyBindings, key))
 end
 
 function Controller:handleRepeatKeys(frames)
