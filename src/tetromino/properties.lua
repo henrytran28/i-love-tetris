@@ -31,8 +31,8 @@ local properties = {
         T = Point:new(-5, 15.5)
     },
     NEXT = {
-        O = Point:new(13.5, 15.5),
-        I = Point:new(12.5, 16),
+        O = Point:new(12.5, 15.5),
+        I = Point:new(11.5, 16),
         J = Point:new(12, 15.5),
         L = Point:new(12, 15.5),
         S = Point:new(12, 15.5),

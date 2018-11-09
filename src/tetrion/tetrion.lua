@@ -32,11 +32,15 @@ end
 function Tetrion:renderHeldPieceBackground()
     love.graphics.setColor(colors.JET)
     love.graphics.rectangle("fill", 30, 30, 150, 150)
+    love.graphics.setColor(colors.ASH)
+    love.graphics.rectangle("line", 30, 30, 150, 150)
 end
 
 function Tetrion:renderNextPieceBackground()
     love.graphics.setColor(colors.JET)
     love.graphics.rectangle("fill", 540, 30, 150, 150)
+    love.graphics.setColor(colors.ASH)
+    love.graphics.rectangle("line", 540, 30, 150, 150)
 end
 
 function Tetrion:renderHeldPiece()
