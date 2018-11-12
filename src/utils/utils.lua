@@ -14,4 +14,16 @@ function utils.shallowcopy(orig)
     return copy
 end
 
+function utils.getKeyFromValue(table, value)
+    for k, v in pairs(table) do
+        if type(v) == "table" then
+            for _, v in pairs(v) do
+                if v == value then return k end
+            end
+        else
+            if v == value then return k end
+        end
+    end
+end
+
 return utils
