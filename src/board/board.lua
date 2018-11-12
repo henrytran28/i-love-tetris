@@ -67,10 +67,10 @@ end
 function Board:checkGameOver()
     for _, square in pairs(self.currentTetromino.squares) do
         if square.y >= self.height then
-            print("END GAME")
-            return
+            return true
         end
     end
+    return false
 end
 
 function Board:updateMatrices()
