@@ -47,6 +47,57 @@ describe("#Board", function() -- tagged as "Board"
         assert.are_equal(0, ghostSquares[3].y)
         assert.are_equal(3, ghostSquares[4].x)
         assert.are_equal(1, ghostSquares[4].y)
+
+        -- add squares that have varying levels
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(5, 0), colors.ASH))
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 0), colors.ASH))
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(7, 0), colors.ASH))
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 1), colors.ASH))
+        board:updateMatrices()
+
+        -- y position should have moved up by 1
+        board.ghostTetromino = board:getGhostTetromino()
+        ghostSquares = board.ghostTetromino.squares
+
+        assert.are_equal(3, ghostSquares[1].x)
+        assert.are_equal(1, ghostSquares[1].y)
+        assert.are_equal(4, ghostSquares[2].x)
+        assert.are_equal(1, ghostSquares[2].y)
+        assert.are_equal(5, ghostSquares[3].x)
+        assert.are_equal(1, ghostSquares[3].y)
+        assert.are_equal(3, ghostSquares[4].x)
+        assert.are_equal(2, ghostSquares[4].y)
+
+        -- y position should have moved up by 1
+        -- x position should have moved right by 1
+        board.currentTetromino:offset(1, 0)
+        board.ghostTetromino = board:getGhostTetromino()
+        ghostSquares = board.ghostTetromino.squares
+
+        assert.are_equal(4, ghostSquares[1].x)
+        assert.are_equal(2, ghostSquares[1].y)
+        assert.are_equal(5, ghostSquares[2].x)
+        assert.are_equal(2, ghostSquares[2].y)
+        assert.are_equal(6, ghostSquares[3].x)
+        assert.are_equal(2, ghostSquares[3].y)
+        assert.are_equal(4, ghostSquares[4].x)
+        assert.are_equal(3, ghostSquares[4].y)
+
+        -- rotate clockwise twice and move right by 3
+        board.currentTetromino:offset(3, 0)
+        board.currentTetromino:rotateCw()
+        board.currentTetromino:rotateCw()
+        board.ghostTetromino = board:getGhostTetromino()
+        ghostSquares = board.ghostTetromino.squares
+
+        assert.are_equal(9, ghostSquares[1].x)
+        assert.are_equal(1, ghostSquares[1].y)
+        assert.are_equal(8, ghostSquares[2].x)
+        assert.are_equal(1, ghostSquares[2].y)
+        assert.are_equal(7, ghostSquares[3].x)
+        assert.are_equal(1, ghostSquares[3].y)
+        assert.are_equal(9, ghostSquares[4].x)
+        assert.are_equal(0, ghostSquares[4].y)
     end)
 
     it("CycleNextTetromino", function()
@@ -76,6 +127,7 @@ describe("#Board", function() -- tagged as "Board"
         table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 19), colors.ASH))
         board:updateMatrices()
         -- O piece topmost squares should be in row 21
+        board.currentTetromino = Tetromino:new("O", properties.SPAWN["O"], colors.ASH)
         board:checkOverlappingSpawn()
         board.movement:hardDrop()
 
