@@ -1,4 +1,5 @@
 local constants = require("constants")
+local colors = require("colors/colors")
 
 local Square = {}
 
@@ -22,7 +23,7 @@ function Square:render()
     love.graphics.setColor(self.color)
     love.graphics.rectangle("fill", (self.x + 7) * unit,
         constants.WINDOW_HEIGHT - ((self.y + 1) * unit), unit, unit)
-    love.graphics.setColor({0.8 * self.color[1], 0.8 * self.color[2], 0.8 * self.color[3]})
+    love.graphics.setColor(colors.BLACK)
     love.graphics.rectangle("line", (self.x + 7) * unit,
         constants.WINDOW_HEIGHT - ((self.y + 1) * unit), unit, unit)
 end
