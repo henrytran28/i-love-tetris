@@ -41,11 +41,8 @@ function Board:getGhostTetromino()
     end
     for i = 0, self.height do
         ghost:offset(0, -1)
-        for _, square in pairs(ghost.squares) do
-            if square.y < 0 or self.boardTetrominosMatrix[square.x][square.y] == 1 then
-                ghost:offset(0, 1)
-                break
-            end
+        if self:obstacleBelow(ghost.squares) then
+            return ghost
         end
     end
     return ghost
@@ -138,7 +135,7 @@ function Board:render()
     self.currentTetromino:render()
 end
 
-function Board:getTetrominoSquareIndex(squares, x, y)
+function Board:getSquareIndex(squares, x, y)
     for i, square in pairs(squares) do
         if square.x == x and square.y == y then
             return i
@@ -152,8 +149,7 @@ function Board:clearLines(indices)
     for _, index in pairs(indices) do
         for _, square in pairs(self.boardTetrominoSquares) do
             if square.y == index then
-                squareToRemove = self:getTetrominoSquareIndex(boardTetrominoSquaresCopy,
-                                                              square.x, square.y)
+                squareToRemove = self:getSquareIndex(boardTetrominoSquaresCopy, square.x, square.y)
                 if squareToRemove ~= nil then
                     table.remove(boardTetrominoSquaresCopy, squareToRemove)
                 end
@@ -174,8 +170,8 @@ function Board:dropLines(indices)
     self.ghostTetromino = self:getGhostTetromino()
 end
 
-function Board:obstacleBelow()
-    for _, square in pairs(self.currentTetromino.squares) do
+function Board:obstacleBelow(squares)
+    for _, square in pairs(squares) do
         if square.y <= 0 or self.boardTetrominosMatrix:isFilled(square.x, square.y - 1) then
             return true
         end
@@ -190,7 +186,7 @@ function Board:handleGravity(frames)
         self.gravityFrameCounter:reset()
     end
 
-    if self:obstacleBelow() then
+    if self:obstacleBelow(self.currentTetromino.squares) then
         self.expirationFrameCounter:add(frames)
         if self.expirationFrameCounter:exceeds(self.expirationFrameCounter.maxFrames) then
             self.movement:hardDrop()

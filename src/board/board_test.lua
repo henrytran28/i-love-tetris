@@ -25,6 +25,8 @@ describe("#Board", function() -- tagged as "Board"
         assert.is.falsy(next(board.boardTetrominoSquares))
         assert.is.truthy(board.boardTetrominosMatrix)
         assert.is.truthy(board.movement)
+        assert.is.truthy(board.gravityFrameCounter)
+        assert.is.truthy(board.expirationFrameCounter)
         assert.is_true(board.holdable)
         local ids = {"O", "I", "J", "L", "S", "Z", "T"}
         assert.is_true(tableContains(ids, board.currentTetromino.id))
@@ -208,13 +210,13 @@ describe("#Board", function() -- tagged as "Board"
             board.currentTetromino.origin)
     end)
 
-    it("GetTetrominoSquareIndex", function()
+    it("GetSquareIndex", function()
         board.currentTetromino = Tetromino:new("J", properties.SPAWN["J"], colors.ASH)
         board.movement:hardDrop()
-        assert.are_equal(1, board:getTetrominoSquareIndex(board.boardTetrominoSquares, 3, 0))
-        assert.are_equal(2, board:getTetrominoSquareIndex(board.boardTetrominoSquares, 4, 0))
-        assert.are_equal(3, board:getTetrominoSquareIndex(board.boardTetrominoSquares, 5, 0))
-        assert.are_equal(4, board:getTetrominoSquareIndex(board.boardTetrominoSquares, 3, 1))
+        assert.are_equal(1, board:getSquareIndex(board.boardTetrominoSquares, 3, 0))
+        assert.are_equal(2, board:getSquareIndex(board.boardTetrominoSquares, 4, 0))
+        assert.are_equal(3, board:getSquareIndex(board.boardTetrominoSquares, 5, 0))
+        assert.are_equal(4, board:getSquareIndex(board.boardTetrominoSquares, 3, 1))
     end)
 
     it("ClearLines", function()
