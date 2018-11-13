@@ -4,6 +4,7 @@ local Tetromino = require("tetromino/tetromino")
 local Square = require("square/square")
 local Point = require("point/point")
 local colors = require("colors/colors")
+local inspect = require("inspect")
 
 describe("#Board", function() -- tagged as "Board"
     local board
@@ -165,16 +166,16 @@ describe("#Board", function() -- tagged as "Board"
     end)
 
     it("UpdateMatrices", function()
-       for i = 0, board.width - 1, 1 do
-           for j = 0, board.height - 1, 1 do
-               assert.are.equal(0, board.boardTetrominosMatrix[i][j])
-           end
-       end
+        for i = 0, board.width - 1, 1 do
+            for j = 0, board.height - 1, 1 do
+                assert.are.equal(0, board.boardTetrominosMatrix[i][j])
+            end
+        end
 
-       table.insert(board.boardTetrominoSquares,
-            Square:new(Point:new(0, 0), colors.ASH))
-       board:updateMatrices()
-       assert.are.equal(1, board.boardTetrominosMatrix[0][0])
+        table.insert(board.boardTetrominoSquares,
+        Square:new(Point:new(0, 0), colors.ASH))
+            board:updateMatrices()
+        assert.are.equal(1, board.boardTetrominosMatrix[0][0])
     end)
 
     it("HoldCurrentTetromino", function()
@@ -277,7 +278,7 @@ describe("#Board", function() -- tagged as "Board"
             assert.is_false(board.boardTetrominosMatrix:isFilled(i, 0))
         end
 
-        -- testing multiple line drop
+        -- testing multiple lines dropped
         for i = 0, 9, 1 do
             table.insert(board.boardTetrominoSquares, Square:new(Point:new(i, 0), colors.ASH))
             table.insert(board.boardTetrominoSquares, Square:new(Point:new(i, 2), colors.ASH))
@@ -307,5 +308,59 @@ describe("#Board", function() -- tagged as "Board"
         for i = 2, 9, 1 do
             assert.is_false(board.boardTetrominosMatrix:isFilled(i, 1))
         end
+    end)
+
+    it("ObstacleBelow", function()
+        assert.is_false(board:obstacleBelow(board.currentTetromino.squares))
+
+        -- testing to see if at the bottom of board
+        board.currentTetromino:offset(0, -19)
+        assert.is_true(board:obstacleBelow(board.currentTetromino.squares))
+
+        -- add squares in the way and test if there is an obstacle below
+        board.currentTetromino = board.nextTetromino
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(3, 0), colors.ASH))
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(4, 0), colors.ASH))
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(5, 0), colors.ASH))
+        table.insert(board.boardTetrominoSquares, Square:new(Point:new(4, 1), colors.ASH))
+
+        board:updateMatrices()
+        board.currentTetromino:offset(0, -17)
+        board:obstacleBelow(board.currentTetromino.squares)
+    end)
+
+    it("HandleGravity", function()
+        -- testing gravity timer
+        assert.are_equal(0, board.gravityFrameCounter.elapsedFrames)
+        board.gravityFrameCounter.maxFrames = 5
+        currentTetrominoID = board.currentTetromino.id
+        board:handleGravity(10)
+
+        -- gravity timer should have reset and moved down one
+        movedDownTetromino = Tetromino:new(currentTetrominoID,
+                properties.SPAWN[currentTetrominoID], colors.ASH)
+        movedDownTetromino:offset(0, -1)
+        assert.are_equal(0, board.gravityFrameCounter.elapsedFrames)
+        assert.are.same(movedDownTetromino.origin, board.currentTetromino.origin)
+
+        -- testing expiration timer
+        assert.are_equal(0, board.expirationFrameCounter.elapsedFrames)
+        board.expirationFrameCounter.maxFrames = 15
+        board.currentTetromino = Tetromino:new("T", properties.SPAWN["T"], colors.ASH)
+        board.currentTetromino:offset(0, -19)
+
+        -- confirm that nothing is on board after offset
+        assert.is_false(board.boardTetrominosMatrix:isFilled(3, 0))
+        assert.is_false(board.boardTetrominosMatrix:isFilled(4, 0))
+        assert.is_false(board.boardTetrominosMatrix:isFilled(5, 0))
+        assert.is_false(board.boardTetrominosMatrix:isFilled(4, 1))
+
+        -- if there is an obstacle below piece should hard drop after exceeds frames
+        board:handleGravity(20)
+        assert.is_true(board.boardTetrominosMatrix:isFilled(3, 0))
+        assert.is_true(board.boardTetrominosMatrix:isFilled(4, 0))
+        assert.is_true(board.boardTetrominosMatrix:isFilled(5, 0))
+        assert.is_true(board.boardTetrominosMatrix:isFilled(4, 1))
+        assert.are_equal(0, board.gravityFrameCounter.elapsedFrames)
     end)
 end)
