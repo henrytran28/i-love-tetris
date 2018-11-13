@@ -6,6 +6,8 @@ local Movement = require("movement/movement")
 local Randomizer = require("randomizer/randomizer")
 local Matrix = require("board/matrix")
 local utils = require("utils/utils")
+local FrameCounter = require("frame_counter/frame_counter")
+local settings = require("settings/settings")
 
 local Board = {}
 
@@ -16,7 +18,9 @@ function Board:new(width, height)
         boardTetrominosMatrix = Matrix:new(width, height),
         boardTetrominoSquares = {},
         holdable = true,
-        heldTetromino = nil
+        heldTetromino = nil,
+        gravityFrameCounter = FrameCounter:new(1/settings.gravitySpeed),
+        expirationFrameCounter = FrameCounter:new(settings.expiryDelay)
     }
     self.__index = self
     setmetatable(board, self)
@@ -168,6 +172,31 @@ function Board:dropLines(indices)
         end
     end
     self.ghostTetromino = self:getGhostTetromino()
+end
+
+function Board:obstacleBelow()
+    for _, square in pairs(self.currentTetromino.squares) do
+        if square.y <= 0 or self.boardTetrominosMatrix:isFilled(square.x, square.y - 1) then
+            return true
+        end
+    end
+    return false
+end
+
+function Board:handleGravity(frames)
+    self.gravityFrameCounter:add(frames)
+    if self.gravityFrameCounter:exceeds(self.gravityFrameCounter.maxFrames) then
+        self.movement:moveDown()
+        self.gravityFrameCounter:reset()
+    end
+
+    if self:obstacleBelow() then
+        self.expirationFrameCounter:add(frames)
+        if self.expirationFrameCounter:exceeds(self.expirationFrameCounter.maxFrames) then
+            self.movement:hardDrop()
+            self.expirationFrameCounter:reset()
+        end
+    end
 end
 
 return Board
