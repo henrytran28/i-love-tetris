@@ -4,7 +4,6 @@ local Tetromino = require("tetromino/tetromino")
 local properties = require("tetromino/properties")
 local Point = require("point/point")
 local Square = require("square/square")
-local inspect = require("inspect")
 
 describe("#Movement", function() -- tagged as "Movement"
     before_each(function()
