@@ -4,7 +4,6 @@ local Tetromino = require("tetromino/tetromino")
 local Square = require("square/square")
 local Point = require("point/point")
 local colors = require("colors/colors")
-local inspect = require("inspect")
 
 describe("#Board", function() -- tagged as "Board"
     local board
