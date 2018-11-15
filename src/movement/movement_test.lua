@@ -55,7 +55,7 @@ describe("#Movement", function() -- tagged as "Movement"
         }
         for id, vals in pairs(widthsAtEachRotationState) do
             tetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
-            for i = 1, #vals, 1 do
+            for i = 1, #vals do
                 assert.are_equal(vals[i], getTetrominoWidth(tetromino))
                 tetromino:rotateCw()
             end
@@ -74,7 +74,7 @@ describe("#Movement", function() -- tagged as "Movement"
         }
         for id, vals in pairs(heightsAtEachRotationState) do
             tetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
-            for i = 1, #vals, 1 do
+            for i = 1, #vals do
                 assert.are_equal(vals[i], getTetrominoHeight(tetromino))
                 tetromino:rotateCw()
             end
@@ -87,7 +87,7 @@ describe("#Movement", function() -- tagged as "Movement"
             movement.board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
             tetrominoWidth = getTetrominoWidth(movement.board.currentTetromino)
             spawnPosition = movement.board.currentTetromino.origin
-            for i = 1, spawnPosition.x, 1 do
+            for i = 1, spawnPosition.x do
                 movement:moveLeft()
                 assert.are_same(
                     Point:new(spawnPosition.x - i, spawnPosition.y),
@@ -108,7 +108,7 @@ describe("#Movement", function() -- tagged as "Movement"
                 Point:new(movement.board.width - tetrominoWidth, 0),
                 properties.COLORS[id]
             )
-            for i = 1, (movement.board.currentTetromino.origin.x - 1) - 5, 1 do
+            for i = 1, (movement.board.currentTetromino.origin.x - 1) - 5 do
                 movement:moveLeft()
             end
             assert.are_same(Point:new(6, 0), movement.board.currentTetromino.origin)
@@ -124,7 +124,7 @@ describe("#Movement", function() -- tagged as "Movement"
             movement.board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
             spawnPosition = movement.board.currentTetromino.origin
             tetrominoWidth = getTetrominoWidth(movement.board.currentTetromino)
-            for i = 1, movement.board.width - (spawnPosition.x + tetrominoWidth), 1 do
+            for i = 1, movement.board.width - (spawnPosition.x + tetrominoWidth) do
                 movement:moveRight()
                 assert.are_same(
                     Point:new(spawnPosition.x + i, spawnPosition.y),
@@ -147,7 +147,7 @@ describe("#Movement", function() -- tagged as "Movement"
             movement.board:updateMatrices()
             movement.board.currentTetromino = Tetromino:new(id, Point:new(0, 0), properties.COLORS[id])
 
-            for i = 1, 5 - tetrominoWidth, 1 do
+            for i = 1, 5 - tetrominoWidth do
                 movement:moveRight()
             end
             assert.are_same(Point:new(5 - tetrominoWidth, 0), movement.board.currentTetromino.origin)
@@ -163,7 +163,7 @@ describe("#Movement", function() -- tagged as "Movement"
             movement.board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
             spawnPosition = movement.board.currentTetromino.origin
             tetrominoHeight = getTetrominoHeight(movement.board.currentTetromino)
-            for i = 1, spawnPosition.y, 1 do
+            for i = 1, spawnPosition.y do
                 movement:moveDown()
                 assert.are_same(Point:new(spawnPosition.x, spawnPosition.y - i), movement.board.currentTetromino.origin)
             end
@@ -176,12 +176,51 @@ describe("#Movement", function() -- tagged as "Movement"
             table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 5)))
             movement.board:updateMatrices()
             movement.board.currentTetromino = Tetromino:new(id, Point:new(4, 8), properties.COLORS[id])
-            for i = 1, 2, 1 do
+            for i = 1, 2 do
                 movement:moveDown()
             end
             assert.are_same(Point:new(4, 6), movement.board.currentTetromino.origin)
             movement:moveDown() -- blocked by occupied squares
             assert.are_same(Point:new(4, 6), movement.board.currentTetromino.origin)
+            movement.board.boardTetrominoSquares = {}
+        end
+    end)
+
+    it("moveUp", function()
+        for _, id in pairs(ids) do
+            -- Test moveUp against edge of the board
+            movement.board.currentTetromino = Tetromino:new(id, Point:new(3, 17), properties.COLORS[id])
+            spawnPosition = movement.board.currentTetromino.origin
+            tetrominoHeight = getTetrominoHeight(movement.board.currentTetromino)
+            cellsToMove = movement.board.height - (spawnPosition.y + tetrominoHeight)
+            for i = 1, cellsToMove do
+                movement:moveUp()
+                assert.are_same(
+                    Point:new(spawnPosition.x, spawnPosition.y + i),
+                    movement.board.currentTetromino.origin
+                )
+            end
+            assert.are_same(
+                Point:new(spawnPosition.x, movement.board.height - tetrominoHeight),
+                movement.board.currentTetromino.origin
+            )
+            movement:moveUp() -- already at edge, shouldn't move
+            assert.are_same(
+                Point:new(spawnPosition.x, movement.board.height - tetrominoHeight),
+                movement.board.currentTetromino.origin
+            )
+            -- Test moveUp against occupied squares
+            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(4, 5)))
+            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 5)))
+            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(6, 5)))
+            movement.board:updateMatrices()
+            movement.board.currentTetromino = Tetromino:new(id, Point:new(4, 0), properties.COLORS[id])
+            for i = 1, 5 - tetrominoHeight do
+                movement:moveUp()
+            end
+            assert.are_same(Point:new(4, 5 - tetrominoHeight), movement.board.currentTetromino.origin)
+            movement:moveUp() -- blocked by occupied squares
+            assert.are_same(Point:new(4, 5 - tetrominoHeight), movement.board.currentTetromino.origin)
             movement.board.boardTetrominoSquares = {}
         end
     end)

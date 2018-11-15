@@ -54,7 +54,7 @@ end
 function Movement:moveUp()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y < self.board.height or self.board.boardTetrominosMatrix[square.x][square.y + 1] ~= 0 then
+        if square.y >= self.board.height or self.board.boardTetrominosMatrix[square.x][square.y + 1] ~= 0 then
             moveable = false
             break
         end
