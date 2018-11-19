@@ -55,7 +55,6 @@ describe("#Board", function() -- tagged as "Board"
         table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 0), colors.ASH))
         table.insert(board.boardTetrominoSquares, Square:new(Point:new(7, 0), colors.ASH))
         table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 1), colors.ASH))
-        board:updateMatrices()
 
         -- y position should have moved up by 1
         board.ghostTetromino = board:getGhostTetromino()
@@ -106,9 +105,11 @@ describe("#Board", function() -- tagged as "Board"
         for i = 0, 99, 1 do
             lastTetrominoID = board.currentTetromino.id
             board:cycleNextTetromino()
-            if i + 1 % 7 ~= 0 then
-                assert.are_not.equal(lastTetrominoID,
-                    board.currentTetromino.id)
+            assert.is.truthy(board.currentTetromino)
+            assert.is.truthy(board.ghostTetromino)
+            assert.is.truthy(board.nextTetromino)
+            if (i + 1) % 7 ~= 0 then
+                assert.are_not.equal(lastTetrominoID, board.currentTetromino.id)
             end
         end
     end)
@@ -124,7 +125,9 @@ describe("#Board", function() -- tagged as "Board"
             board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
             board:offsetOverlappingTetromino(board.currentTetromino)
             expectedHeight = properties.SPAWN[id].y
-            if id == "I" then expectedHeight = properties.SPAWN[id].y + 2 end
+            if id == "I" then
+                expectedHeight = properties.SPAWN[id].y + 2
+            end
 
             assert.are_equal(properties.SPAWN[id].x, board.currentTetromino.origin.x)
             assert.are_equal(expectedHeight, board.currentTetromino.origin.y)
@@ -136,7 +139,6 @@ describe("#Board", function() -- tagged as "Board"
         tetromino = Tetromino:new("O", Point:new(5, 18), colors.ASH)
         assert.is_true(board:isOverlapping(tetromino))
     end)
-    
 
     it("IsGameOver", function()
         local ids = {"O", "I", "J", "L", "S", "Z", "T"}
@@ -160,8 +162,8 @@ describe("#Board", function() -- tagged as "Board"
         end
 
         table.insert(board.boardTetrominoSquares,
-        Square:new(Point:new(0, 0), colors.ASH))
-            board:updateMatrices()
+            Square:new(Point:new(0, 0), colors.ASH))
+        board:updateMatrices()
         assert.are.equal(1, board.boardTetrominosMatrix[0][0])
     end)
 
@@ -306,14 +308,13 @@ describe("#Board", function() -- tagged as "Board"
 
         -- add squares in the way and test if there is an obstacle below
         board.currentTetromino = board.nextTetromino
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(3, 0), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(4, 0), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(5, 0), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(4, 1), colors.ASH))
+        board.boardTetrominosMatrix:fill(3, 0)
+        board.boardTetrominosMatrix:fill(4, 0)
+        board.boardTetrominosMatrix:fill(5, 0)
+        board.boardTetrominosMatrix:fill(4, 1)
 
-        board:updateMatrices()
         board.currentTetromino:offset(0, -17)
-        board:obstacleBelow(board.currentTetromino.squares)
+        assert.is_true(board:obstacleBelow(board.currentTetromino.squares))
     end)
 
     it("HandleGravity", function()
@@ -324,11 +325,8 @@ describe("#Board", function() -- tagged as "Board"
         board:handleGravity(10)
 
         -- gravity timer should have reset and moved down one
-        movedDownTetromino = Tetromino:new(currentTetrominoID,
-                properties.SPAWN[currentTetrominoID], colors.ASH)
-        movedDownTetromino:offset(0, -1)
         assert.are_equal(0, board.gravityFrameCounter.elapsedFrames)
-        assert.are.same(movedDownTetromino.origin, board.currentTetromino.origin)
+        assert.are.equal(18, board.currentTetromino.origin.y)
 
         -- testing expiration timer
         assert.are_equal(0, board.expirationFrameCounter.elapsedFrames)
