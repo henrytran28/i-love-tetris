@@ -54,7 +54,7 @@ end
 function Movement:moveUp()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y >= self.board.height or self.board.boardTetrominosMatrix[square.x][square.y + 1] ~= 0 then
+        if square.y + 1 >= self.board.height or self.board.boardTetrominosMatrix[square.x][square.y + 1] ~= 0 then
             moveable = false
             break
         end
@@ -66,14 +66,8 @@ function Movement:moveUp()
 end
 
 function Movement:hardDrop()
-    for i = 0, self.board.height, 1 do
+    while not self.board:obstacleBelow() do
         self.board.currentTetromino:offset(0, -1)
-        for _, square in pairs(self.board.currentTetromino.squares) do
-            if square.y < 0 or self.board.boardTetrominosMatrix[square.x][square.y] == 1 then
-                self.board.currentTetromino:offset(0, 1)
-                break
-            end
-        end
     end
 
     for _, square in pairs(self.board.currentTetromino.squares) do

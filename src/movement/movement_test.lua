@@ -224,4 +224,36 @@ describe("#Movement", function() -- tagged as "Movement"
             movement.board.boardTetrominoSquares = {}
         end
     end)
+
+    it("hardDrop", function()
+        for _, id in pairs(ids) do
+            -- initialize some variables
+            movement.board.holdable = false
+            movement.board.gravityFrameCounter:add(10)
+            movement.board.expirationFrameCounter:add(10)
+
+            -- check currentTetromino drops to the bottom of the board
+            movement.board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
+            finalPosition = Point:new(movement.board.currentTetromino.origin.x, 0)
+            -- make sure the final square positions are not filled yet
+            for _, layout in pairs(properties.LAYOUTS[id]) do
+                point = sum(finalPosition, layout)
+                assert.is_false(movement.board.boardTetrominosMatrix:isFilled(point.x, point.y))
+            end
+            movement:hardDrop()
+            -- after the drop the same square positions should be filled
+            for _, layout in pairs(properties.LAYOUTS[id]) do
+                point = sum(finalPosition, layout)
+                assert.is_true(movement.board.boardTetrominosMatrix:isFilled(point.x, point.y))
+            end
+            -- check variables have reset
+            assert.is_true(movement.board.holdable)
+            assert.are_equal(0, movement.board.gravityFrameCounter.elapsedFrames)
+            assert.are_equal(0, movement.board.expirationFrameCounter.elapsedFrames)
+
+            -- reset the board for the next iteration
+            movement.board.boardTetrominoSquares = {}
+            movement.board:updateMatrices()
+        end
+    end)
 end)
