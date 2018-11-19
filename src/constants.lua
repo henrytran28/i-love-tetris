@@ -1,6 +1,6 @@
 local constants = {
     UNIT = 30,
-    WINDOW_WIDTH = 510,
+    WINDOW_WIDTH = 720,
     WINDOW_HEIGHT = 600
 }
 
