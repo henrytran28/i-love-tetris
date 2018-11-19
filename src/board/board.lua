@@ -51,21 +51,27 @@ end
 function Board:cycleNextTetromino()
     self:updateMatrices()
     self.currentTetromino = self.nextTetromino
-    self:checkOverlappingSpawn()
+    self:offsetOverlappingTetromino(self.currentTetromino)
     self.ghostTetromino = self:getGhostTetromino()
     self.nextTetromino = Randomizer:next()
 end
 
-function Board:checkOverlappingSpawn()
-    for _, square in pairs(self.currentTetromino.squares) do
-        if self.boardTetrominosMatrix:isFilled(square.x, square.y) then
-            self.currentTetromino:offset(0, 1)
-            self:checkGameOver()
-        end
+function Board:offsetOverlappingTetromino(tetromino)
+    while self:isOverlapping(tetromino) do
+        tetromino:offset(0, 1)
     end
 end
 
-function Board:checkGameOver()
+function Board:isOverlapping(tetromino)
+    for _, square in pairs(tetromino.squares) do
+        if self.boardTetrominosMatrix:isFilled(square.x, square.y) then
+            return true
+        end
+    end
+    return false
+end
+
+function Board:isGameOver()
     for _, square in pairs(self.currentTetromino.squares) do
         if square.y >= self.height then
             return true

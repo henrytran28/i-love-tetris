@@ -113,55 +113,43 @@ describe("#Board", function() -- tagged as "Board"
         end
     end)
 
-    it("CheckOverlappingSpawn", function()
-        board.boardTetrominosMatrix:fill(5, 19)
+    it("OffsetOverlappingTetromino", function()
+        local ids = {"O", "I", "J", "L", "S", "Z", "T"}
+
+        board.boardTetrominosMatrix:fill(5, 18)
+        board.boardTetrominosMatrix:fill(6, 18)
         board.boardTetrominosMatrix:fill(6, 19)
         board.boardTetrominosMatrix:fill(6, 20)
-        board.currentTetromino = Tetromino:new("L", properties.SPAWN["L"], colors.ASH)
-        board:checkOverlappingSpawn()
-        assert.are_equal(properties.SPAWN["L"].x, board.currentTetromino.origin.x)
-        assert.are_equal(properties.SPAWN["L"].y + 1, board.currentTetromino.origin.y)
-    end)
+        for _, id in pairs(ids) do
+            board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
+            board:offsetOverlappingTetromino(board.currentTetromino)
+            expectedHeight = properties.SPAWN[id].y
+            if id == "I" then expectedHeight = properties.SPAWN[id].y + 2 end
 
-    it("CheckGameOverNotIPiece", function()
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(5, 18), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 18), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 19), colors.ASH))
-        board:updateMatrices()
-        -- O piece topmost squares should be in row 21
-        board.currentTetromino = Tetromino:new("O", properties.SPAWN["O"], colors.ASH)
-        board:checkOverlappingSpawn()
-        board.movement:hardDrop()
-
-        -- Change the current tetromino if it is equal to the I piece
-        if board.currentTetromino.id == "I" then
-            board.currentTetromino = board.nextTetromino
+            assert.are_equal(properties.SPAWN[id].x, board.currentTetromino.origin.x)
+            assert.are_equal(expectedHeight, board.currentTetromino.origin.y)
         end
-
-        -- Piece should be moved up and square should be out of board
-        board:checkOverlappingSpawn()
-        assert.is_true(board:checkGameOver())
     end)
 
-    it("CheckGameOverIPiece", function()
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(5, 18), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 18), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 19), colors.ASH))
-        board:updateMatrices()
-        -- O piece topmost squares should be in row 21
-        board.currentTetromino = Tetromino:new("O", properties.SPAWN["O"], colors.ASH)
-        board:checkOverlappingSpawn()
-        board.movement:hardDrop()
+    it("IsOverlapping", function()
+        board.boardTetrominosMatrix:fill(5, 18)
+        tetromino = Tetromino:new("O", Point:new(5, 18), colors.ASH)
+        assert.is_true(board:isOverlapping(tetromino))
+    end)
+    
 
-        -- Set current tetromino to I piece and check game over
-        board.currentTetromino = Tetromino:new("I", properties.SPAWN["I"], colors.ASH)
-        board:checkOverlappingSpawn()
-        -- game shouldn't end yet because all squares of I piece in row 22
-        assert.is_false(board:checkGameOver())
-        board.movement:hardDrop()
-        -- game should end since current tetromino out of board
-        board:checkOverlappingSpawn()
-        assert.is_true(board:checkGameOver())
+    it("IsGameOver", function()
+        local ids = {"O", "I", "J", "L", "S", "Z", "T"}
+
+        board.boardTetrominosMatrix:fill(5, 19)
+        board.boardTetrominosMatrix:fill(5, 20)
+        board.boardTetrominosMatrix:fill(5, 21)
+
+        for _, id in pairs(ids) do
+            board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
+            board:offsetOverlappingTetromino(board.currentTetromino)
+            assert.is_true(board:isGameOver())
+        end
     end)
 
     it("UpdateMatrices", function()
