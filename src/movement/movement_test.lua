@@ -4,6 +4,7 @@ local Tetromino = require("tetromino/tetromino")
 local properties = require("tetromino/properties")
 local Point = require("point/point")
 local Square = require("square/square")
+local colors = require("colors/colors")
 
 function getTetrominoWidth(tetromino)
     leftmost = 10
@@ -254,6 +255,42 @@ describe("#Movement", function() -- tagged as "Movement"
             -- reset the board for the next iteration
             movement.board.boardTetrominoSquares = {}
             movement.board:updateMatrices()
+        end
+    end)
+
+    it("wallKickTestPass", function()
+        for _, id in pairs(ids) do
+            -- no offset, the test should pass
+            movement.board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], colors.ASH)
+            assert.is_true(movement:wallKickTestPass(0, 0))
+
+            -- test an offset that should pass
+            assert.is_true(movement:wallKickTestPass(0, -1))
+
+            -- check against the walls
+            movement.board.currentTetromino = Tetromino:new(id, Point:new(0, 0), colors.ASH)
+            assert.is_false(movement:wallKickTestPass(-1, 0))
+            assert.is_false(movement:wallKickTestPass(0, -1))
+            movement.board.currentTetromino = Tetromino:new(
+                id,
+                Point:new(
+                    movement.board.width - getTetrominoWidth(movement.board.currentTetromino),
+                    movement.board.height - getTetrominoHeight(movement.board.currentTetromino)),
+                colors.ASH
+            )
+            assert.is_false(movement:wallKickTestPass(1, 0))
+            assert.is_false(movement:wallKickTestPass(0, 1))
+
+            -- check against filled squares
+            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 0), colors.ASH))
+            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 1), colors.ASH))
+            movement.board:updateMatrices()
+            movement.board.currentTetromino = Tetromino:new(
+                id,
+                Point:new(5 - getTetrominoWidth(movement.board.currentTetromino), 0),
+                colors.ASH
+            )
+            assert.is_false(movement:wallKickTestPass(1, 0))
         end
     end)
 end)
