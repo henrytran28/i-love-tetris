@@ -5,6 +5,7 @@ local properties = require("tetromino/properties")
 local Point = require("point/point")
 local Square = require("square/square")
 local colors = require("colors/colors")
+local twistTests = require("movement/rotation_twists")
 
 function getTetrominoWidth(tetromino)
     leftmost = 10
@@ -291,6 +292,27 @@ describe("#Movement", function() -- tagged as "Movement"
                 colors.ASH
             )
             assert.is_false(movement:wallKickTestPass(1, 0))
+        end
+    end)
+
+    it("rotationTwists", function()
+        for id, tests in pairs(twistTests) do
+            for _, test in pairs(tests) do
+                movement.board.currentTetromino = Tetromino:new(id, test.initialPosition, colors.ASH)
+                for i = 1, test.initialRotationState do
+                    movement.board.currentTetromino:rotateCw()
+                end
+                for _, position in pairs(test.boundaryPositions) do
+                    movement.board.boardTetrominosMatrix:fill(position.x, position.y)
+                end
+                if test.rotation == "cw" then
+                    movement:rotateCw()
+                elseif test.rotation == "ccw" then
+                    movement:rotateCcw()
+                end
+                assert.are_same(test.finalPosition, movement.board.currentTetromino.origin)
+                assert.are_same(test.finalRotationState, movement.board.currentTetromino.rotationState.value)
+            end
         end
     end)
 end)
