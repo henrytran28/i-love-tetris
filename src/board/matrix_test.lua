@@ -1,4 +1,5 @@
 local Matrix = require("board/matrix")
+local colors = require("colors/colors")
 
 describe("#Matrix", function() -- tagged as "Matrix"
     before_each(function()
@@ -6,9 +7,9 @@ describe("#Matrix", function() -- tagged as "Matrix"
     end)
 
     it("Constructor", function()
-        for i = 0, 9, 1 do
-            for j = 0, 21, 1 do
-                assert.are.equal(0, matrix[i][j])
+        for x = 0, 9, 1 do
+            for y = 0, 21, 1 do
+                assert.are.equal(0, matrix[x][y])
             end
         end
         assert.are.equal(matrix.width, 10)
@@ -16,45 +17,31 @@ describe("#Matrix", function() -- tagged as "Matrix"
     end)
 
     it("Fill", function()
-        for i = 0, 9, 1 do
-            for j = 0, 21, 1 do
-                matrix:fill(i, j)
-                assert.are.same(matrix[i][j], 1)
+        for x = 0, 9, 1 do
+            for y = 0, 21, 1 do
+                matrix:fill(x, y, colors.ASH)
+                assert.are.same(matrix[x][y], colors.ASH)
             end
         end
     end)
 
     it("Unfill", function()
-        for i = 0, 9, 1 do
-            for j = 0, 21, 1 do
-                matrix:fill(i, j)
-                matrix:unfill(i, j)
-                assert.are.same(matrix[i][j], 0)
+        for x = 0, 9, 1 do
+            for y = 0, 21, 1 do
+                matrix:fill(x, y, colors.ASH)
+                matrix:unfill(x, y)
+                assert.are.same(matrix[x][y], 0)
             end
         end
     end)
 
     it("IsFilled", function()
-        for i = 0, 9, 1 do
-            for j = 0, 21, 1 do
-                matrix:fill(i, j)
-                assert.is_true(matrix:isFilled(i, j))
-                matrix:unfill(i, j)
-                assert.is_not_true(matrix:isFilled(i, j))
-            end
-        end
-    end)
-
-    it("Clear", function()
-        for i = 0, 9, 1 do
-            for j = 0, 21, 1 do
-                matrix:fill(i, j)
-            end
-        end
-        matrix:clear()
-        for i = 0, 9, 1 do
-            for j = 0, 21, 1 do
-                assert(matrix[i][j], 0)
+        for x = 0, 9, 1 do
+            for y = 0, 21, 1 do
+                matrix:fill(x, y, colors.ASH)
+                assert.is_true(matrix:isFilled(x, y))
+                matrix:unfill(x, y)
+                assert.is_not_true(matrix:isFilled(x, y))
             end
         end
     end)
