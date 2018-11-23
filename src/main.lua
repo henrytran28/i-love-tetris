@@ -36,5 +36,5 @@ function love.update(dt)
 
     local fps = love.timer.getFPS()
     controller:handleRepeatKeys(dt * fps)
-    -- board:handleGravity(dt * fps)
+    board:handleGravity(dt * fps)
 end
