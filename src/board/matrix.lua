@@ -28,6 +28,9 @@ function Matrix:unfill(x, y)
 end
 
 function Matrix:isFilled(x, y)
+    if x >= self.width or x < 0 or y >= self.height or y < 0 then
+        return false
+    end
     return self[x][y] ~= 0
 end
 

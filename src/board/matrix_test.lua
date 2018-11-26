@@ -2,6 +2,8 @@ local Matrix = require("board/matrix")
 local colors = require("colors/colors")
 
 describe("#Matrix", function() -- tagged as "Matrix"
+    local matrix
+
     before_each(function()
         matrix = Matrix:new(10, 22)
     end)
@@ -12,8 +14,8 @@ describe("#Matrix", function() -- tagged as "Matrix"
                 assert.are.equal(0, matrix[x][y])
             end
         end
-        assert.are.equal(matrix.width, 10)
-        assert.are.equal(matrix.height, 22)
+        assert.are.equal(10, matrix.width)
+        assert.are.equal(22, matrix.height)
     end)
 
     it("Fill", function()
