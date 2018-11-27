@@ -7,7 +7,7 @@ local Square = require("square/square")
 local colors = require("colors/colors")
 local twistTests = require("movement/rotation_twists")
 
-function getTetrominoWidth(tetromino)
+local function getTetrominoWidth(tetromino)
     leftmost = 10
     rightmost = 0
     for _, square in pairs(tetromino.squares) do
@@ -21,7 +21,7 @@ function getTetrominoWidth(tetromino)
     return rightmost + 1 - leftmost
 end
 
-function getTetrominoHeight(tetromino)
+local function getTetrominoHeight(tetromino)
     topmost = 0
     bottommost = 22
     for _, square in pairs(tetromino.squares) do
@@ -229,7 +229,6 @@ describe("#Movement", function() -- tagged as "Movement"
 
     it("hardDrop", function()
         for _, id in pairs(ids) do
-            -- initialize some variables
             movement.board.holdable = false
             movement.board.gravityFrameCounter:add(10)
             movement.board.expirationFrameCounter:add(10)
