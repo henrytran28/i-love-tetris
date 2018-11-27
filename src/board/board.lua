@@ -129,7 +129,7 @@ end
 
 function Board:clearLines(lines)
     for _, line in pairs(lines) do
-        for x = 0, self.width-1 do
+        for x = 0, self.width - 1 do
             self.boardTetrominosMatrix:unfill(x, line)
         end
     end
@@ -138,9 +138,9 @@ end
 function Board:dropLines(indices)
     for linesToDrop, line in pairs(indices) do
         for y = line - linesToDrop + 1, self.height-1 do
-            for x = 0, self.width-1 do
-                if self.boardTetrominosMatrix[x][y] ~= 0 then
-                    self.boardTetrominosMatrix:fill(x, y-1, self.boardTetrominosMatrix[x][y])
+            for x = 0, self.width - 1 do
+                if self.boardTetrominosMatrix:isFilled(x, y) then
+                    self.boardTetrominosMatrix:fill(x, y - 1, self.boardTetrominosMatrix[x][y])
                     self.boardTetrominosMatrix:unfill(x, y)
                 end
             end

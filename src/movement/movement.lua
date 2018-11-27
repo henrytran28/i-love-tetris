@@ -12,7 +12,7 @@ end
 function Movement:moveLeft()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.x <= 0 or self.board.boardTetrominosMatrix:isFilled(square.x-1, square.y) then
+        if square.x <= 0 or self.board.boardTetrominosMatrix:isFilled(square.x - 1, square.y) then
             moveable = false
             break
         end
@@ -26,7 +26,7 @@ end
 function Movement:moveRight()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.x + 1 >= self.board.width or self.board.boardTetrominosMatrix:isFilled(square.x+1, square.y) then
+        if square.x + 1 >= self.board.width or self.board.boardTetrominosMatrix:isFilled(square.x + 1, square.y) then
             moveable = false
             break
         end
@@ -40,7 +40,7 @@ end
 function Movement:moveDown()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y <= 0 or self.board.boardTetrominosMatrix:isFilled(square.x, square.y-1) then
+        if square.y <= 0 or self.board.boardTetrominosMatrix:isFilled(square.x, square.y - 1) then
             moveable = false
             break
         end
@@ -54,7 +54,7 @@ end
 function Movement:moveUp()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y < self.board.height or self.board.boardTetrominosMatrix:isFilled(square.x, square.y+1) then
+        if square.y < self.board.height or self.board.boardTetrominosMatrix:isFilled(square.x, square.y + 1) then
             moveable = false
             break
         end

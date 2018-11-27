@@ -54,7 +54,7 @@ function Matrix:print()
     for y = #self[1], 0, -1 do
         for x = 0, #self do
             local value = 0
-            if self[x][y] ~= 0 then value = 1 end
+            if self:isFilled(x, y) then value = 1 end
             io.write(value .. " ")
         end
         io.write("\n")
@@ -65,7 +65,7 @@ end
 function Matrix:render()
     for y = 0, #self[1] do
         for x = 0, #self do
-            if self[x][y] ~= 0 then
+            if self:isFilled(x, y) then
                 Square:new(Point:new(x, y), self[x][y]):render()
             end
         end
