@@ -66,7 +66,7 @@ function Movement:moveUp()
 end
 
 function Movement:hardDrop()
-    while not self.board:obstacleBelow() do
+    while not self.board:obstacleBelow(self.board.currentTetromino.squares) do
         self.board.currentTetromino:offset(0, -1)
     end
 
