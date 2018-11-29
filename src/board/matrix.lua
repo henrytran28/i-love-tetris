@@ -51,11 +51,13 @@ function Matrix:getFilledIndices()
 end
 
 function Matrix:print()
-    for y = #self[1], 0, -1 do
-        for x = 0, #self do
-            local value = 0
-            if self:isFilled(x, y) then value = 1 end
-            io.write(value .. " ")
+    for y = self.height, 0, -1 do
+        for x = 0, self.width do
+            if self:isFilled(x, y) then
+                io.write(1 .. " ")
+            else
+                io.write(0 .. " ")
+            end
         end
         io.write("\n")
     end
@@ -63,8 +65,8 @@ function Matrix:print()
 end
 
 function Matrix:render()
-    for y = 0, #self[1] do
-        for x = 0, #self do
+    for y = 0, self.height do
+        for x = 0, self.width do
             if self:isFilled(x, y) then
                 Square:new(Point:new(x, y), self[x][y]):render()
             end
