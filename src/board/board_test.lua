@@ -22,7 +22,6 @@ describe("#Board", function() -- tagged as "Board"
     it("Constructor", function()
         assert.are.equal(10, board.width)
         assert.are.equal(22, board.height)
-        assert.is.falsy(next(board.boardTetrominoSquares))
         assert.is.truthy(board.boardTetrominosMatrix)
         assert.is.truthy(board.movement)
         assert.is.truthy(board.gravityFrameCounter)
@@ -51,10 +50,10 @@ describe("#Board", function() -- tagged as "Board"
         assert.are_equal(1, ghostSquares[4].y)
 
         -- add squares that have varying levels
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(5, 0), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 0), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(7, 0), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(6, 1), colors.ASH))
+        board.boardTetrominosMatrix:fill(5, 0, colors.ASH)
+        board.boardTetrominosMatrix:fill(6, 0, colors.ASH)
+        board.boardTetrominosMatrix:fill(7, 0, colors.ASH)
+        board.boardTetrominosMatrix:fill(6, 1, colors.ASH)
 
         -- y position should have moved up by 1
         board.ghostTetromino = board:getGhostTetromino()
@@ -136,6 +135,8 @@ describe("#Board", function() -- tagged as "Board"
 
     it("IsOverlapping", function()
         board.boardTetrominosMatrix:fill(5, 18)
+        tetromino = Tetromino:new("O", Point:new(0, 0), colors.ASH)
+        assert.is_false(board:isOverlapping(tetromino))
         tetromino = Tetromino:new("O", Point:new(5, 18), colors.ASH)
         assert.is_true(board:isOverlapping(tetromino))
     end)
@@ -143,28 +144,15 @@ describe("#Board", function() -- tagged as "Board"
     it("IsGameOver", function()
         local ids = {"O", "I", "J", "L", "S", "Z", "T"}
 
-        board.boardTetrominosMatrix:fill(5, 19)
-        board.boardTetrominosMatrix:fill(5, 20)
-        board.boardTetrominosMatrix:fill(5, 21)
+        board.boardTetrominosMatrix:fill(5, 19, colors.ASH)
+        board.boardTetrominosMatrix:fill(5, 20, colors.ASH)
+        board.boardTetrominosMatrix:fill(5, 21, colors.ASH)
 
         for _, id in pairs(ids) do
             board.currentTetromino = Tetromino:new(id, properties.SPAWN[id], properties.COLORS[id])
             board:offsetOverlappingTetromino(board.currentTetromino)
             assert.is_true(board:isGameOver())
         end
-    end)
-
-    it("UpdateMatrices", function()
-        for i = 0, board.width - 1, 1 do
-            for j = 0, board.height - 1, 1 do
-                assert.are.equal(0, board.boardTetrominosMatrix[i][j])
-            end
-        end
-
-        table.insert(board.boardTetrominoSquares,
-            Square:new(Point:new(0, 0), colors.ASH))
-        board:updateMatrices()
-        assert.are.equal(1, board.boardTetrominosMatrix[0][0])
     end)
 
     it("HoldCurrentTetromino", function()
@@ -200,26 +188,15 @@ describe("#Board", function() -- tagged as "Board"
             board.currentTetromino.origin)
     end)
 
-    it("GetSquareIndex", function()
-        board.currentTetromino = Tetromino:new("J", properties.SPAWN["J"], colors.ASH)
-        board.movement:hardDrop()
-        assert.are_equal(1, board:getSquareIndex(board.boardTetrominoSquares, 3, 0))
-        assert.are_equal(2, board:getSquareIndex(board.boardTetrominoSquares, 4, 0))
-        assert.are_equal(3, board:getSquareIndex(board.boardTetrominoSquares, 5, 0))
-        assert.are_equal(4, board:getSquareIndex(board.boardTetrominoSquares, 3, 1))
-    end)
-
     it("ClearLines", function()
         -- testing multiple lines cleared
         for i = 0, 9, 1 do
-            table.insert(board.boardTetrominoSquares, Square:new(Point:new(i, 3), colors.ASH))
-            table.insert(board.boardTetrominoSquares, Square:new(Point:new(i, 8), colors.ASH))
+            board.boardTetrominosMatrix:fill(i, 3, colors.ASH)
+            board.boardTetrominosMatrix:fill(i, 8, colors.ASH)
         end
 
-        board:updateMatrices()
         local filledIndices = board.boardTetrominosMatrix:getFilledIndices()
         board:clearLines(filledIndices)
-        board:updateMatrices()
 
         for i = 0, 9, 1 do
             assert.is_false(board.boardTetrominosMatrix:isFilled(i, 3))
@@ -228,11 +205,9 @@ describe("#Board", function() -- tagged as "Board"
 
         -- testing that not filled line is left alone
         for i = 0, 7, 1 do
-            table.insert(board.boardTetrominoSquares,
-                Square:new(Point:new(i, 2), colors.ASH))
+            board.boardTetrominosMatrix:fill(i, 2, colors.ASH)
         end
 
-        board:updateMatrices()
         filledIndices = board.boardTetrominosMatrix:getFilledIndices()
         assert.is.falsy(next(filledIndices))
 
@@ -246,19 +221,16 @@ describe("#Board", function() -- tagged as "Board"
     it("DropLines", function()
         -- testing single line drop
         for i = 0, 9, 1 do
-            table.insert(board.boardTetrominoSquares,
-                Square:new(Point:new(i, 0), colors.ASH))
+            board.boardTetrominosMatrix:fill(i, 0, colors.ASH)
         end
         -- add in squares to be dropped down
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(0, 1), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(1, 1), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(2, 1), colors.ASH))
+        board.boardTetrominosMatrix:fill(0, 1, colors.ASH)
+        board.boardTetrominosMatrix:fill(1, 1, colors.ASH)
+        board.boardTetrominosMatrix:fill(2, 1, colors.ASH)
 
-        board:updateMatrices()
         local filledIndices = board.boardTetrominosMatrix:getFilledIndices()
         board:clearLines(filledIndices)
         board:dropLines(filledIndices)
-        board:updateMatrices()
 
         for i = 0, 2, 1 do
             assert.is_true(board.boardTetrominosMatrix:isFilled(i, 0))
@@ -269,20 +241,18 @@ describe("#Board", function() -- tagged as "Board"
 
         -- testing multiple lines dropped
         for i = 0, 9, 1 do
-            table.insert(board.boardTetrominoSquares, Square:new(Point:new(i, 0), colors.ASH))
-            table.insert(board.boardTetrominoSquares, Square:new(Point:new(i, 2), colors.ASH))
+            board.boardTetrominosMatrix:fill(i, 0, colors.ASH)
+            board.boardTetrominosMatrix:fill(i, 2, colors.ASH)
         end
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(0, 1), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(1, 1), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(2, 1), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(0, 3), colors.ASH))
-        table.insert(board.boardTetrominoSquares, Square:new(Point:new(1, 3), colors.ASH))
+        board.boardTetrominosMatrix:fill(0, 1, colors.ASH)
+        board.boardTetrominosMatrix:fill(1, 1, colors.ASH)
+        board.boardTetrominosMatrix:fill(2, 1, colors.ASH)
+        board.boardTetrominosMatrix:fill(0, 3, colors.ASH)
+        board.boardTetrominosMatrix:fill(1, 3, colors.ASH)
 
-        board:updateMatrices()
         filledIndices = board.boardTetrominosMatrix:getFilledIndices()
         board:clearLines(filledIndices)
         board:dropLines(filledIndices)
-        board:updateMatrices()
 
         for i = 0, 2, 1 do
             assert.is_true(board.boardTetrominosMatrix:isFilled(i, 0))
