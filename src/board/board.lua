@@ -16,7 +16,6 @@ function Board:new(width, height)
         width = width,
         height = height,
         boardTetrominosMatrix = Matrix:new(width, height),
-        boardTetrominoSquares = {},
         holdable = true,
         heldTetromino = nil,
         gravityFrameCounter = FrameCounter:new(1/settings.gravitySpeed),
@@ -33,7 +32,6 @@ function Board:new(width, height)
 end
 
 function Board:getGhostTetromino()
-    self:updateMatrices()
     ghost = Tetromino:new(self.currentTetromino.id,
         self.currentTetromino.origin, colors.ASH)
     for i = 1, self.currentTetromino.rotationState.value do
@@ -49,7 +47,6 @@ function Board:getGhostTetromino()
 end
 
 function Board:cycleNextTetromino()
-    self:updateMatrices()
     self.currentTetromino = self.nextTetromino
     self:offsetOverlappingTetromino(self.currentTetromino)
     self.ghostTetromino = self:getGhostTetromino()
@@ -57,7 +54,7 @@ function Board:cycleNextTetromino()
 end
 
 function Board:offsetOverlappingTetromino(tetromino)
-    while self:isOverlapping(tetromino) do
+    while self:isOverlapping(tetromino) and tetromino.origin.y < self.height do
         tetromino:offset(0, 1)
     end
 end
@@ -78,13 +75,6 @@ function Board:isGameOver()
         end
     end
     return false
-end
-
-function Board:updateMatrices()
-    self.boardTetrominosMatrix:clear()
-    for _, square in pairs(self.boardTetrominoSquares) do
-        self.boardTetrominosMatrix:fill(square.x, square.y)
-    end
 end
 
 function Board:holdCurrentTetromino()
@@ -124,8 +114,6 @@ function Board:renderBackground()
 end
 
 function Board:render()
-    self:updateMatrices()
-
     -- Render the background
     self:renderBackground()
 
@@ -133,43 +121,28 @@ function Board:render()
     self.ghostTetromino:render()
 
     -- Render pieces except current one
-    for _, square in pairs(self.boardTetrominoSquares) do
-        square:render()
-    end
+    self.boardTetrominosMatrix:render()
 
     -- Render current playable tetromino
     self.currentTetromino:render()
 end
 
-function Board:getSquareIndex(squares, x, y)
-    for i, square in pairs(squares) do
-        if square.x == x and square.y == y then
-            return i
+function Board:clearLines(lines)
+    for _, line in pairs(lines) do
+        for x = 0, self.width - 1 do
+            self.boardTetrominosMatrix:unfill(x, line)
         end
     end
-    return nil
-end
-
-function Board:clearLines(indices)
-    boardTetrominoSquaresCopy = utils.shallowcopy(self.boardTetrominoSquares)
-    for _, index in pairs(indices) do
-        for _, square in pairs(self.boardTetrominoSquares) do
-            if square.y == index then
-                squareToRemove = self:getSquareIndex(boardTetrominoSquaresCopy, square.x, square.y)
-                if squareToRemove ~= nil then
-                    table.remove(boardTetrominoSquaresCopy, squareToRemove)
-                end
-            end
-        end
-    end
-    self.boardTetrominoSquares = utils.shallowcopy(boardTetrominoSquaresCopy)
 end
 
 function Board:dropLines(indices)
-    for linesDropped, index in pairs(indices) do
-        for key, square in pairs(self.boardTetrominoSquares) do
-            if square.y > index - linesDropped then
-                square.y = square.y - 1
+    for linesToDrop, line in pairs(indices) do
+        for y = line - linesToDrop + 1, self.height-1 do
+            for x = 0, self.width - 1 do
+                if self.boardTetrominosMatrix:isFilled(x, y) then
+                    self.boardTetrominosMatrix:fill(x, y - 1, self.boardTetrominosMatrix[x][y])
+                    self.boardTetrominosMatrix:unfill(x, y)
+                end
             end
         end
     end

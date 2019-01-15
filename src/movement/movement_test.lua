@@ -101,9 +101,8 @@ describe("#Movement", function() -- tagged as "Movement"
             assert.are_same(Point:new(0, spawnPosition.y), movement.board.currentTetromino.origin)
 
             -- Test moveLeft against occupied squares
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 0)))
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 1)))
-            movement.board:updateMatrices()
+            movement.board.boardTetrominosMatrix:fill(5, 0, colors.ASH)
+            movement.board.boardTetrominosMatrix:fill(5, 1, colors.ASH)
 
             movement.board.currentTetromino = Tetromino:new(
                 id,
@@ -144,9 +143,8 @@ describe("#Movement", function() -- tagged as "Movement"
             )
 
             -- Test moveRight against occupied squares
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 0)))
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 1)))
-            movement.board:updateMatrices()
+            movement.board.boardTetrominosMatrix:fill(5, 0, colors.ASH)
+            movement.board.boardTetrominosMatrix:fill(5, 1, colors.ASH)
             movement.board.currentTetromino = Tetromino:new(id, Point:new(0, 0), properties.COLORS[id])
 
             for i = 1, 5 - tetrominoWidth do
@@ -155,7 +153,7 @@ describe("#Movement", function() -- tagged as "Movement"
             assert.are_same(Point:new(5 - tetrominoWidth, 0), movement.board.currentTetromino.origin)
             movement:moveRight() -- blocked by occupied squares
             assert.are_same(Point:new(5 - tetrominoWidth, 0), movement.board.currentTetromino.origin)
-            movement.board.boardTetrominoSquares = {}
+            movement.board.boardTetrominosMatrix:reset()
         end
     end)
 
@@ -174,9 +172,8 @@ describe("#Movement", function() -- tagged as "Movement"
             assert.are_same(Point:new(spawnPosition.x, 0), movement.board.currentTetromino.origin)
 
             -- Test moveDown against occupied squares
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(4, 5)))
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 5)))
-            movement.board:updateMatrices()
+            movement.board.boardTetrominosMatrix:fill(4, 5, colors.ASH)
+            movement.board.boardTetrominosMatrix:fill(5, 5, colors.ASH)
             movement.board.currentTetromino = Tetromino:new(id, Point:new(4, 8), properties.COLORS[id])
             for i = 1, 2 do
                 movement:moveDown()
@@ -184,7 +181,7 @@ describe("#Movement", function() -- tagged as "Movement"
             assert.are_same(Point:new(4, 6), movement.board.currentTetromino.origin)
             movement:moveDown() -- blocked by occupied squares
             assert.are_same(Point:new(4, 6), movement.board.currentTetromino.origin)
-            movement.board.boardTetrominoSquares = {}
+            movement.board.boardTetrominosMatrix:reset()
         end
     end)
 
@@ -212,10 +209,9 @@ describe("#Movement", function() -- tagged as "Movement"
                 movement.board.currentTetromino.origin
             )
             -- Test moveUp against occupied squares
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(4, 5)))
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 5)))
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(6, 5)))
-            movement.board:updateMatrices()
+            movement.board.boardTetrominosMatrix:fill(4, 5, colors.ASH)
+            movement.board.boardTetrominosMatrix:fill(5, 5, colors.ASH)
+            movement.board.boardTetrominosMatrix:fill(6, 5, colors.ASH)
             movement.board.currentTetromino = Tetromino:new(id, Point:new(4, 0), properties.COLORS[id])
             for i = 1, 5 - tetrominoHeight do
                 movement:moveUp()
@@ -253,8 +249,7 @@ describe("#Movement", function() -- tagged as "Movement"
             assert.are_equal(0, movement.board.expirationFrameCounter.elapsedFrames)
 
             -- reset the board for the next iteration
-            movement.board.boardTetrominoSquares = {}
-            movement.board:updateMatrices()
+            movement.board.boardTetrominosMatrix:reset()
         end
     end)
 
@@ -282,9 +277,8 @@ describe("#Movement", function() -- tagged as "Movement"
             assert.is_false(movement:wallKickTestPass(0, 1))
 
             -- check against filled squares
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 0), colors.ASH))
-            table.insert(movement.board.boardTetrominoSquares, Square:new(Point:new(5, 1), colors.ASH))
-            movement.board:updateMatrices()
+            movement.board.boardTetrominosMatrix:fill(5, 0, colors.ASH)
+            movement.board.boardTetrominosMatrix:fill(5, 1, colors.ASH)
             movement.board.currentTetromino = Tetromino:new(
                 id,
                 Point:new(5 - getTetrominoWidth(movement.board.currentTetromino), 0),
@@ -311,6 +305,8 @@ describe("#Movement", function() -- tagged as "Movement"
                 end
                 assert.are_same(test.finalPosition, movement.board.currentTetromino.origin)
                 assert.are_same(test.finalRotationState, movement.board.currentTetromino.rotationState.value)
+
+                movement.board.boardTetrominosMatrix:reset()
             end
         end
     end)
