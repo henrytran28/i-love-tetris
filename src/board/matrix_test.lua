@@ -47,4 +47,19 @@ describe("#Matrix", function() -- tagged as "Matrix"
             end
         end
     end)
+
+    it("Reset", function()
+        for x = 0, 9, 1 do
+            for y = 0, 21, 1 do
+                matrix:fill(x, y, colors.ASH)
+                assert.is_true(matrix:isFilled(x, y))
+            end
+        end
+        matrix:reset()
+        for x = 0, 9, 1 do
+            for y = 0, 21, 1 do
+                assert.is_false(matrix:isFilled(x, y))
+            end
+        end
+    end)
 end)

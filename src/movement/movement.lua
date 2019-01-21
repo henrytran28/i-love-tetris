@@ -3,7 +3,7 @@ local properties = require("tetromino/properties")
 local Movement = {}
 
 function Movement:init(board)
-    local movement = { board = board }
+    local movement = {board = board}
     self.__index = self
     setmetatable(movement, self)
     return movement
@@ -54,7 +54,7 @@ end
 function Movement:moveUp()
     moveable = true
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.y < self.board.height or self.board.boardTetrominosMatrix:isFilled(square.x, square.y + 1) then
+        if square.y + 1 >= self.board.height or self.board.boardTetrominosMatrix:isFilled(square.x, square.y + 1) then
             moveable = false
             break
         end
@@ -66,7 +66,7 @@ function Movement:moveUp()
 end
 
 function Movement:hardDrop()
-    for i = 0, self.board.height, 1 do
+    while not self.board:obstacleBelow(self.board.currentTetromino.squares) do
         self.board.currentTetromino:offset(0, -1)
         for _, square in pairs(self.board.currentTetromino.squares) do
             if square.y < 0 or self.board.boardTetrominosMatrix:isFilled(square.x, square.y) then
@@ -92,9 +92,13 @@ function Movement:hardDrop()
 end
 
 function Movement:rotateCw()
-    if self.board.currentTetromino.id == "O" then return end
+    if self.board.currentTetromino.id == "O" then
+        return
+    end
     self.board.currentTetromino:rotateCw()
-    for _, coordinates in pairs(properties.WALL_KICKS_CW[self.board.currentTetromino.id][self.board.currentTetromino.rotationState:prev() + 1]) do
+    for _, coordinates in pairs(
+        properties.WALL_KICKS_CW[self.board.currentTetromino.id][self.board.currentTetromino.rotationState:prev() + 1]
+    ) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
             self.board.ghostTetromino = self.board:getGhostTetromino()
             return
@@ -104,11 +108,14 @@ function Movement:rotateCw()
 end
 
 function Movement:rotateCcw()
-    if self.board.currentTetromino.id == "O" then return end
+    if self.board.currentTetromino.id == "O" then
+        return
+    end
     prevState = self.board.currentTetromino.state
     self.board.currentTetromino:rotateCcw()
-    for _, coordinates in pairs(properties.WALL_KICKS_CCW[self.board.currentTetromino.id]
-        [self.board.currentTetromino.rotationState:next() + 1]) do
+    for _, coordinates in pairs(
+        properties.WALL_KICKS_CCW[self.board.currentTetromino.id][self.board.currentTetromino.rotationState:next() + 1]
+    ) do
         if self:wallKickTestPass(coordinates[1], coordinates[2]) then
             self.board.ghostTetromino = self.board:getGhostTetromino()
             return
@@ -120,9 +127,10 @@ end
 function Movement:wallKickTestPass(xOffset, yOffset)
     self.board.currentTetromino:offset(xOffset, yOffset)
     for _, square in pairs(self.board.currentTetromino.squares) do
-        if square.x < 0 or square.x >= self.board.width or
-           square.y < 0 or square.y >= self.board.height or
-           self.board.boardTetrominosMatrix:isFilled(square.x, square.y) then
+        if
+            square.x < 0 or square.x >= self.board.width or square.y < 0 or square.y >= self.board.height or
+                self.board.boardTetrominosMatrix:isFilled(square.x, square.y)
+         then
             self.board.currentTetromino:offset(-xOffset, -yOffset)
             return false
         end

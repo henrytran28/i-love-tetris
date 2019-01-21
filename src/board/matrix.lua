@@ -27,6 +27,14 @@ function Matrix:unfill(x, y)
     self[x][y] = 0
 end
 
+function Matrix:reset()
+    for x = 0, self.width - 1 do
+        for y = 0, self.height - 1 do
+            self:unfill(x, y)
+        end
+    end
+end
+
 function Matrix:isFilled(x, y)
     if x >= self.width or x < 0 or y >= self.height or y < 0 then
         return false
